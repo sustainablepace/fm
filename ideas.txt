@@ -1,11 +1,50 @@
 ## Club ##
-- Image
+- City
+- Configured square[]
+- Fan[]
+- Success-O-Meter
 - Money
-- Stadium
-- Name
-- Success
-- Fans
-- Press
+- Asset[]
+
+ G G G G G G G
+ G N N N N N G
+ G N R R R N G
+ G N R L R N G
+
+## City ##
+- Country
+- Population
+- n x regional squares
+
+## Country ##
+- n x national squares
+- League[]
+
+## World ##
+- n x global squares
+
+## Configured Square ##
+- Square
+- Status (available or locked)
+- Fan (or empty)
+
+## Square ##
+- n x resources
+- n x population
+
+## Success-O-Meter ##
+- Number of units
+- threshold
+
+## Fan ##
+- Role
+
+## Role ##
+- Happy fan
+- normal fan
+- angry fan
+- scout
+- marketeer
 
 ## Manager ##
 - experience => ability to see coach strength without distortion
@@ -24,7 +63,6 @@
 - Defensive power
 - Morale
 - Energy
-
 
 ## Player ##
 
@@ -97,12 +135,6 @@ From all players a team strength is calculated
 
 
 
-         Local Regional National Global
-Talent   ++    +++      0        +
-Support  +     ++       +++      0
-Merch    +     0        ++       +++
-Sponsors 0     +++      +        ++     
-
 
 Civ                          Footie
 - Population                 - Fans
@@ -112,3 +144,5 @@ Civ                          Footie
 -- Luxuries (Entertainers)   -- Support (Fanclub)
 -- Science (Scientists)      -- Talent (Scout)
 -- Cash (Taxmen)             -- Cash (Marketing)
+- Wonders of the World       - Achievements/Assets (assets exist right from the start, achievements are realized...like nx champion)
+- CIV Score                  - Popularity
