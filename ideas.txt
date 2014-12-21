@@ -1,0 +1,22 @@
+missing objects
+- season
+
+grunt
+
+editor
+
+         Local Regional National Global
+Talent   ++    +++      0        +
+Support  +     ++       +++      0
+Merch    +     0        ++       +++
+Sponsors 0     +++      +        ++     
+
+
+Civ                          Footie
+- Population                 - Fans
+- Food                       - Success
+- Resources                  - Cash (Sponsors) 
+- Trade                      - Population
+-- Luxuries (Entertainers)   -- Support (Fanclub)
+-- Science (Scientists)      -- Talent (Scout)
+-- Cash (Taxmen)             -- Cash (Marketing)
