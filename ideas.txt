@@ -1,6 +1,5 @@
 missing objects
-- season
-
+-
 grunt
 
 editor
@@ -10,6 +9,140 @@ Talent   ++    +++      0        +
 Support  +     ++       +++      0
 Merch    +     0        ++       +++
 Sponsors 0     +++      +        ++     
+=======
+## Club ##
+- City
+- Configured square[]
+- Fan[]
+- Success-O-Meter
+- Money
+- Asset[]
+
+ G G G G G G G
+ G N N N N N G
+ G N R R R N G
+ G N R L R N G
+
+## City ##
+- Country
+- Population
+- n x regional squares
+
+## Country ##
+- n x national squares
+- League[]
+
+## World ##
+- n x global squares
+
+## Configured Square ##
+- Square
+- Status (available or locked)
+- Fan (or empty)
+
+## Square ##
+- n x resources
+- n x population
+
+## Success-O-Meter ##
+- Number of units
+- threshold
+
+## Fan ##
+- Role
+
+## Role ##
+- Happy fan
+- normal fan
+- angry fan
+- scout
+- marketeer
+
+## Manager ##
+- experience => ability to see coach strength without distortion
+- talent (depends on level of difficulty)
+- ambition (depends on level of difficulty)
+
+## Coach ##
+- intercultural
+- experience => ability to see players strength without distortion
+- works well with talents/youngsters
+- works well with psychos/troublemakers
+
+## Team ##
+- Offensive power
+- Midfield power
+- Defensive power
+- Morale
+- Energy
+
+## Player ##
+
+### Objective attributes ###
+- Age
+- Nationality => Decreases the strength if coach is not international
+- Position => GK, Defense, Midfield, Offense; Left wing, right wing, center
+
+### Skills (immutable) on a range of 1 to 10 (progression, easy from 1 to 2, hard from 9 to 10) ###
+- Talent 
+- Ambition (Lives clean/self discipline)
+- Attitude (Team orientation/Morale)
+- Technical ability
+- Physical ability (Robustness/Health)
+
+### Special traits (immutable) yes/no ###
+- Universality => Decreases the strength loss when playing a different position
+- Crowd-pleaser/Likeability => Increases the influence of the audience on the result. Increases overall image of club
+- Tactical ability/Coachable/Understanding/Knowledge of the game/Tactics => Increases the influence of trainer's strength on team strength
+- Verletzungsanfällig/injury-prone
+- Leader => Leadership/Turn game around
+- Poacher => increases offensive power of team
+- Work horse => increases strength of leaders and poachers
+- Set piece specialist => Increased offensive power
+- Sportsmanship/Fairness => Increases overall image of club
+- Party animal => Decreases image of club
+
+
+- Mental ability/strength/toughness/Focus/Perform under pressure => Performs well in important games
+- Joker => Increased strength when substituted
+- Troublemaker => descreases team morale when not playing consistently.
+- Psycho =>
+- Diver =>
+- Wechselwillig/Traveller => leaves the club at earliest opportunity
+- Passing/Tödlicher pass => increased assists
+
+
+### Skills (mutable) ###
+- Form
+- Energy/Condition
+- Experience
+
+Effects on game
+- Age               => none
+- Talent            => none
+- Ambition          => Heightens team morale
+- Attitude          => Lowers or heightens team members strength.
+- Technical ability => Contributes to team strength
+- Physical ability  => Decreases the risk of injuries, increases team strength
+
+Effects on development
+- Age               => Decreases technical ability and health
+- Talent            => How strong increases technical ability in the future?
+- Ambition          => How strong decreases skill with old age?
+- Attitude          => Low attitude descreases form when not playing consistently.
+- Technical ability => none
+- Physical ability  => Decreases the risk of injuries
+
+Effects on club
+- Age               => none
+- Talent            => none
+- Ambition          => none
+- Attitude          => none
+- Technical ability => none
+- Physical ability  => none
+
+From all individual attributes a total strength is calculated. 
+From all players a team strength is calculated
 
 
 Civ                          Footie
@@ -20,3 +153,6 @@ Civ                          Footie
 -- Luxuries (Entertainers)   -- Support (Fanclub)
 -- Science (Scientists)      -- Talent (Scout)
 -- Cash (Taxmen)             -- Cash (Marketing)
+- Wonders of the World       - Achievements/Assets (assets exist right from the start, achievements are realized...like nx champion)
+- CIV Score                  - Popularity
+
