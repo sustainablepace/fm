@@ -16,7 +16,7 @@
 			}
 			return true;
 		};
-
+		
 		this.playNext = function( resultCalculator ) {
 			for( var i in this.rounds ) {
 				var round = this.rounds[ i ];

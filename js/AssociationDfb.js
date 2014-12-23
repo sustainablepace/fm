@@ -1,9 +1,9 @@
 (function(exports) {
 	"use strict";
-	var Association = function() {
+	var AssociationGermany = function() {
 		this.tournaments = [];
 
-		var createTournaments = function() {
+		this.createTournaments = function( calendar ) {
 			var scheduler = new fixtureSchedulerRoundRobinTwoLegs();
 			var bundesliga = new Tournament( scheduler );
 			var bundesliga2 = new Tournament( scheduler );

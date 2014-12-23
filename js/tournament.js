@@ -1,8 +1,9 @@
 (function(exports) {
 	"use strict";
 	
-	var Tournament = function( scheduler ) {
+	var Tournament = function( id, scheduler ) {
 		var self = this;
+		this.id = id;
 		this.teams = null;
 		this.fixtures = null;
 		this.scheduler = scheduler;

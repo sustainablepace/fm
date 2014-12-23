@@ -1,4 +1,15 @@
-missing objects
+Nationale Ligen 1-3 + Relegation
+Nationale Pokale
+Europa League
+Champions League
+
+- Bundesliga
+- 2. Bundesliga
+- 3. Bundesliga
+- DFB Pokal
+- Super Cup
+
+
 -
 grunt
 
