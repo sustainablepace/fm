@@ -1,9 +1,9 @@
 (function(exports) {
 	"use strict";
-	var Team        = require("./team.js").Team;
-	var TeamFactory = require("./teamFactory.js").TeamFactory;
+	var Tournament = require("./tournament.js").Tournament;
+	var TournamentFactory = require("./tournamentFactory.js").TournamentFactory;
 	
-	var TeamFactoryRandom = function() {
+	var TournamentFactoryBundesliga = function() {
 		var self = this;
 		this.teams = [];
 
