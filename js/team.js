@@ -11,7 +11,12 @@
 		} else {
 			this.strength = Math.random();
 		}
+		this.id = Team.prototype.nextId;
+		Team.prototype.nextId++;
 	};
+
+	Team.prototype.nextId = 1;
+
 	exports.Team = Team;
 })(this);
 

@@ -2,10 +2,11 @@
 	"use strict";
 	var TableEntry = require("./tableEntry.js").TableEntry;
 	
-	var Table = function( season, rules ) {
-		var self     = this;
-		this.season  = season;
-		this.entries = [];
+	var Table = function( tournament, rules ) {
+		var self         = this;
+
+		this.tournament  = tournament;
+		this.entries     = [];
 
 		var handleRound = function( round ) {
 			for( var j in round.fixtures ) {
@@ -39,12 +40,12 @@
 			}
 		};
 
-		for( var i in season.teams ) {
-			this.entries.push( new TableEntry( season.teams[ i ] ) );
+		for( var i in this.tournament.teams ) {
+			this.entries.push( new TableEntry( tournament.teams[ i ] ) );
 		}
 
-		for( var i in season.rounds ) {
-			handleRound( season.rounds[ i ] );
+		for( var i in tournament.fixtures.rounds ) {
+			handleRound( tournament.fixtures.rounds[ i ] );
 		}
 		this.entries.sort( rules.tableEntrySorter );
 	};

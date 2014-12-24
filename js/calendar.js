@@ -6,7 +6,7 @@
 		var self = this;
 		var data = eval('(' + json + ')');
 		
-		this.now  = moment( year + '-W28-1' );
+		var startOfSeason = moment( year + '-W28-1' );
 		this.eventsPast     = {};
 		this.eventsUpcoming = {};
 		this.tournaments    = {};

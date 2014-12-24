@@ -7,7 +7,6 @@ var Match      = require("./match.js").Match;
 var Fixture    = require("./fixture.js").Fixture;
 var Result     = require("./result.js").Result;
 var Rules      = require("./rules.js").Rules;
-var League     = require("./league.js").League;
 var Season     = require("./season.js").Season;
 var Round     = require("./round.js").Round;
 var Table      = require("./table.js").Table;

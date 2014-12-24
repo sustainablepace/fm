@@ -1,99 +1,85 @@
 (function(exports) {
 	"use strict";
-	var Team    = require("./team.js").Team;
-	var Match   = require("./match.js").Match;
-	var Fixture = require("./fixture.js").Fixture;
-	var Round   = require("./round.js").Round;
-	var Table   = require("./table.js").Table;
-	
-	var Season = function( teams ) {
+	var moment = require('moment');
+
+	var Season = function( year, calendarJson ) {
 		var self = this;
 
-		this.teams = teams;
-		
-		var createFixtures = function( teams ) {
-			var pool     = [];
-			var numTeams = teams.length;
-			self.rounds  = [];
-			
-			for( var i = 0; i < numTeams; i++ ) {
-				pool.push( i );
-			}
-			
-			for( var j = 0; j < numTeams - 1 ; j++ ) {
-				var roundFirstHalf  = new Round();		
-				var roundSecondHalf = new Round();		
-				
-				for( var k = 0; k < numTeams / 2; k++ ) {
-					var team1 = pool[ k                ];
-					var team2 = pool[ numTeams - k - 1 ];
-					
-					roundFirstHalf.addFixture( 
-						new Fixture( 
-							new Match( 
-								self.teams[ team1 ], 
-								self.teams[ team2 ] 
-							), 
-							team1, 
-							team2 
-						)
-					);
-					roundSecondHalf.addFixture( 
-						new Fixture( 
-							new Match( 
-								self.teams[ team2 ], 
-								self.teams[ team1 ] 
-							), 
-							team2, 
-							team1 
-						)
-					);
-				}
-				self.rounds[ j                ] = roundFirstHalf;		
-				self.rounds[ j + numTeams - 1 ] = roundSecondHalf;		
+		this.startDate = moment( year + '-W28-1' );
+		this.endDate   = moment( this.startDate ).add( 1, 'y' ).subtract( 1, 'd' );
 
-				// See http://en.wikipedia.org/wiki/Round-robin_tournament#Scheduling_algorithm
-				var pivot = pool.shift();
-				var first = pool.shift();
-				pool.push( first );
-				pool.unshift( pivot );
+		this.tournaments    = {};
+		this.year           = year;
+		this.calendar       = [];
+		this.now            = 0;	
+
+		var createCalendar = function( json ) {
+			var cal  = eval('(' + json + ')');
+			var date = moment( self.startDate );
+			var endOfYear = moment( self.startDate ).endOf( 'year' );
+			do {
+				var event = null;
+				var index = 'W' + date.format( 'W-E' );
+				if( cal[ index ] ) {
+					event = cal[ index ];
+				}
+				self.calendar.push( event );		
+				date.add( 1, 'd' );
+			} while( date.isBefore( self.endDate ) );
+		}
+
+		createCalendar( calendarJson );
+
+		this.isSchedulable = function( tournament ) {
+			if( tournament.fixtures && tournament.fixtures.rounds ) {
+				return tournament.fixtures.rounds.length === this.getNumberOfTournamentEvents( tournament );
+			}
+			throw "Cannot schedule tournament, no fixtures available.";
+		};
+		
+		this.getNumberOfTournamentEvents = function( tournament ) {
+			var num = 0;
+			for( var i in this.events ) {
+				if( ~this.eventsUpcoming[ i ].indexOf( tournament.id ) ) {
+					num++;
+				}
+			}
+			return num;
+		};
+		
+		this.registerTournament = function( tournament ) {
+			if( this.isSchedulable( tournament ) ) {
+				this.tournaments[ tournament.id ] = tournament;
 			}
 		};
 		
-		this.playNext = function( resultCalculator ) {
-			for( var i in this.rounds ) {
-				var round = this.rounds[ i ];
-				if( round.isFinished() ) {
-					continue;
-				}
-				for( var j in round.fixtures ) {
-					var fixture = round.fixtures[ j ];
-					if( !fixture.match.isPlayed() ) {
-						fixture.match.play( resultCalculator );
+		this.unregisterTournament = function( tournament ) {
+			if( this.tournaments[ tournament.id ] ) {
+				delete this.tournaments[ tournament.id ];
+			}
+		};
+		
+		this.next = function() {
+			var events = this.calendar[ this.now ];
+			if( events ) {
+				for( var i in events ) {
+					if( this.tournaments[ events[ i ] ] ) {
+						this.tournaments[ events[ i ] ].playNext();
 					}
 				}
-				break;
-			}
-		};
-
-		this.play = function( resultCalculator ) {
-			for( var i in this.rounds ) {
-				var round = this.rounds[ i ];
-				for( var j in round.fixtures ) {
-					var fixture = round.fixtures[ j ];
-					if( !fixture.match.isPlayed() ) {
-						fixture.match.play( resultCalculator );
-					}
+				this.now++;
+			}			
+			
+		}
+		
+		this.trigger = function() {
+			for( var i in this.tournaments ) {
+				if( this.tournaments[ i ] instanceof Tournament ) {
+					this.tournaments[ i ].playNext.apply( this.tournaments[ i ], [] );
 				}
 			}
-		};
-
-		this.calculateTable = function( rules ) {
-			return new Table( this, rules );
-		};
-		
-		this.fixtures = null;
-		createFixtures( this.teams );
+		}
 	};
+
 	exports.Season = Season;
 })(this);
