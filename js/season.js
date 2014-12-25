@@ -39,8 +39,8 @@
 		
 		this.getNumberOfTournamentEvents = function( tournament ) {
 			var num = 0;
-			for( var i in this.events ) {
-				if( ~this.eventsUpcoming[ i ].indexOf( tournament.id ) ) {
+			for( var i in this.calendar ) {
+				if( this.calendar[ i ] !== null && ~this.calendar[ i ].indexOf( tournament.id ) ) {
 					num++;
 				}
 			}
@@ -64,21 +64,13 @@
 			if( events ) {
 				for( var i in events ) {
 					if( this.tournaments[ events[ i ] ] ) {
-						this.tournaments[ events[ i ] ].playNext();
+						this.tournaments[ events[ i ] ].playNext.apply( this.tournaments[ events[ i ] ], [] );
 					}
 				}
-				this.now++;
 			}			
-			
+			this.now++;
 		}
 		
-		this.trigger = function() {
-			for( var i in this.tournaments ) {
-				if( this.tournaments[ i ] instanceof Tournament ) {
-					this.tournaments[ i ].playNext.apply( this.tournaments[ i ], [] );
-				}
-			}
-		}
 	};
 
 	exports.Season = Season;
