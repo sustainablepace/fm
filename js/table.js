@@ -26,14 +26,20 @@
 				if( rules.isHomeWin( result ) ) {
 					self.entries[ match.home.id ].addPoints( rules.getPointsForWin() );
 					self.entries[ match.away.id ].addPoints( rules.getPointsForLoss() );
+					self.entries[ match.home.id ].addWin();
+					self.entries[ match.away.id ].addLoss();
 				}
 				else if( rules.isHomeLoss( result ) ) {
 					self.entries[ match.home.id ].addPoints( rules.getPointsForLoss() );
 					self.entries[ match.away.id ].addPoints( rules.getPointsForWin() );
+					self.entries[ match.home.id ].addLoss();
+					self.entries[ match.away.id ].addWin();
 				}
 				else if( rules.isDraw( result ) ) {
 					self.entries[ match.away.id ].addPoints( rules.getPointsForDraw() );
 					self.entries[ match.home.id ].addPoints( rules.getPointsForDraw() );
+					self.entries[ match.home.id ].addDraw();
+					self.entries[ match.away.id ].addDraw();
 				} else {
 					throw "Undefined result, neither win, loss or draw.";
 				}

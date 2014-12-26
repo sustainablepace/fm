@@ -22,26 +22,37 @@ var FixtureSchedulerRoundRobinTwoLegs = require("./fixtureSchedulerRoundRobinTwo
 	var rules = new Rules();
 	var resultCalculator = new ResultCalculatorStrengthPlusRandom();
 	var scheduler = new FixtureSchedulerRoundRobinTwoLegs();
-	var teams = [];
-	var tournament;
+	var teamsBl3 = [];
+	var teamsBl2 = [];
+	var teamsBl1 = [];
+	var tournamentBl3;
+	var tournamentBl2;
+	var tournamentBl1;
 
 	var createSeason = function() {
 		season = new Season( year, calendar );
-		tournament = new Tournament( 'BL3', season, scheduler, resultCalculator );
-		tournament.setTeams( teams );
+		tournamentBl3 = new Tournament( 'BL3', season, scheduler, resultCalculator );
+		tournamentBl3.setTeams( teamsBl3 );
+		tournamentBl2 = new Tournament( 'BL2', season, scheduler, resultCalculator );
+		tournamentBl2.setTeams( teamsBl2 );
+		tournamentBl1 = new Tournament( 'BL1', season, scheduler, resultCalculator );
+		tournamentBl1.setTeams( teamsBl1 );
 	};
 
 	var createHandler = function() {
 		createSeason();
-		updateTable();
+		updateTable( tournamentBl3 );
+		updateTable( tournamentBl2 );
+		updateTable( tournamentBl1 );
 	};
 	var nextMatchHandler = function() {
 		if( !(season instanceof Season) ) {
 			throw "Create a season first.";
 		}
 		season.next();
-		updateTable();
-		
+		updateTable( tournamentBl3 );
+		updateTable( tournamentBl2 );
+		updateTable( tournamentBl1 );
 	};
 	var endSeasonHandler = function() {
 		if( !(season instanceof Season) ) {
@@ -50,16 +61,18 @@ var FixtureSchedulerRoundRobinTwoLegs = require("./fixtureSchedulerRoundRobinTwo
 		while( !season.isFinished() ) {
 			season.next();
 		}
-		updateTable();
+		updateTable( tournamentBl3 );
+		updateTable( tournamentBl2 );
+		updateTable( tournamentBl1 );
 
 		year++;
 		createSeason();
 	};
-	var updateTable = function( table ) {
+	var updateTable = function( tournament ) {
 		$( "#matchday" ).text( season.getDate().format( 'MMM Do YYYY' ) );
 
 		var table = new Table( tournament, rules );
-		var el = $( "#table tbody" );
+		var el = $( "#table-" + tournament.id.toLowerCase() + " tbody" );
 		el.empty();
 		var ranking = table.getRanking();
 		for( var i = 0; i < ranking.length; i++ ) {
@@ -67,6 +80,9 @@ var FixtureSchedulerRoundRobinTwoLegs = require("./fixtureSchedulerRoundRobinTwo
 			row.append( $( "<td></td>" ).text( i + 1 ) );
 			row.append( $( "<td></td>" ).text( ranking[ i ].team.name ) );
 			row.append( $( "<td></td>" ).text( ranking[ i ].gamesPlayed ) );
+			row.append( $( "<td></td>" ).text( ranking[ i ].wins ) );
+			row.append( $( "<td></td>" ).text( ranking[ i ].draws ) );
+			row.append( $( "<td></td>" ).text( ranking[ i ].losses ) );
 			row.append( $( "<td></td>" ).text( ranking[ i ].goalsFor ) );
 			row.append( $( "<td></td>" ).text( ranking[ i ].goalsAgainst ) );
 			row.append( $( "<td></td>" ).text( ranking[ i ].points ) );
@@ -78,14 +94,22 @@ var FixtureSchedulerRoundRobinTwoLegs = require("./fixtureSchedulerRoundRobinTwo
 		$( "#next" ).on( "click", nextMatchHandler );
 		$( "#end" ).on( "click", endSeasonHandler );
 	};
-	var teamsLoaded = $.get( "data/teams.json" ).done( function( data ) {
+	var teamsLoadedBl3 = $.get( "data/bl3.json" ).done( function( data ) {
 		var teamFactory = new TeamFactoryJson();
-		teams = teamFactory.get( JSON.stringify( data ) );
+		teamsBl3 = teamFactory.get( JSON.stringify( data ) );
+	} );
+	var teamsLoadedBl2 = $.get( "data/bl2.json" ).done( function( data ) {
+		var teamFactory = new TeamFactoryJson();
+		teamsBl2 = teamFactory.get( JSON.stringify( data ) );
+	} );
+	var teamsLoadedBl1 = $.get( "data/bl1.json" ).done( function( data ) {
+		var teamFactory = new TeamFactoryJson();
+		teamsBl1 = teamFactory.get( JSON.stringify( data ) );
 	} );
 	var calendarLoaded = $.get( "data/calendar.json" ).done( function( data ) {
 		calendar = JSON.stringify( data );
 	} );
-	$.when( teamsLoaded, calendarLoaded ).done( function( data ) {
+	$.when( teamsLoadedBl3, teamsLoadedBl2, teamsLoadedBl1, calendarLoaded ).done( function( data ) {
 		init();
 	} ).fail( function() {
 		throw "Could not load data.";
