@@ -6,7 +6,6 @@ var Team        = require("../team.js").Team;
 var TeamFactoryRandom = require("../teamFactoryRandom.js").TeamFactoryRandom;
 var Match       = require("../match.js").Match;
 var Round       = require("../round.js").Round;
-var Fixture     = require("../fixture.js").Fixture;
 var Result      = require("../result.js").Result;
 var ResultCalculatorDeterministic = require("../resultCalculatorDeterministic.js").ResultCalculatorDeterministic;
 var FixtureSchedulerRoundRobinTwoLegs = require("../fixtureSchedulerRoundRobinTwoLegs.js").FixtureSchedulerRoundRobinTwoLegs;

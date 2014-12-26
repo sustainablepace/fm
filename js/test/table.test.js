@@ -3,7 +3,6 @@ var should  = require("should");
 var Table   = require("../table.js").Table;
 var Team    = require("../team.js").Team;
 var Match   = require("../match.js").Match;
-var Fixture = require("../fixture.js").Fixture;
 var Result  = require("../result.js").Result;
 var Rules   = require("../rules.js").Rules;
 var Season  = require("../season.js").Season;
@@ -40,8 +39,11 @@ describe('Table', function(){
 		var rules = new Rules();
 		var table = new Table( tournament, rules );
 		table.should.have.property( 'entries' );
-		table.entries.should.be.an.Array.with.lengthOf( size );
-		table.entries.should.matchEach( function( entry ) {
+		table.entries.should.be.an.Object;
+
+		var ranking = table.getRanking();
+		ranking.should.be.an.Array.with.lengthOf( 4 );
+		ranking.should.matchEach( function( entry ) {
 			entry.should.have.property( 'gamesPlayed' );
 			entry.gamesPlayed.should.eql( 2 * ( size - 1 ) );
 		});

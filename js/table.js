@@ -6,7 +6,7 @@
 		var self         = this;
 
 		this.tournament  = tournament;
-		this.entries     = [];
+		this.entries     = {};
 
 		var handleRound = function( round ) {
 			for( var j in round.fixtures ) {
@@ -14,40 +14,48 @@
 			}
 		};
 
-		var handleFixture = function( fixture ) {
-			var result = fixture.match.result;
+		var handleFixture = function( match ) {
+			var result = match.result;
 			if( result !== null ) {
-				self.entries[ fixture.home ].addGamesPlayed( 1 );
-				self.entries[ fixture.away ].addGamesPlayed( 1 );
-				self.entries[ fixture.home ].addGoalsFor( result.goalsHome );
-				self.entries[ fixture.home ].addGoalsAgainst( result.goalsAway );
-				self.entries[ fixture.away ].addGoalsFor( result.goalsAway );
-				self.entries[ fixture.away ].addGoalsAgainst( result.goalsHome );
+				self.entries[ match.home.id ].addGamesPlayed( 1 );
+				self.entries[ match.away.id ].addGamesPlayed( 1 );
+				self.entries[ match.home.id ].addGoalsFor( result.goalsHome );
+				self.entries[ match.home.id ].addGoalsAgainst( result.goalsAway );
+				self.entries[ match.away.id ].addGoalsFor( result.goalsAway );
+				self.entries[ match.away.id ].addGoalsAgainst( result.goalsHome );
 				if( rules.isHomeWin( result ) ) {
-					self.entries[ fixture.home ].addPoints( rules.getPointsForWin() );
-					self.entries[ fixture.away ].addPoints( rules.getPointsForLoss() );
+					self.entries[ match.home.id ].addPoints( rules.getPointsForWin() );
+					self.entries[ match.away.id ].addPoints( rules.getPointsForLoss() );
 				}
 				else if( rules.isHomeLoss( result ) ) {
-					self.entries[ fixture.home ].addPoints( rules.getPointsForLoss() );
-					self.entries[ fixture.away ].addPoints( rules.getPointsForWin() );
+					self.entries[ match.home.id ].addPoints( rules.getPointsForLoss() );
+					self.entries[ match.away.id ].addPoints( rules.getPointsForWin() );
 				}
 				else if( rules.isDraw( result ) ) {
-					self.entries[ fixture.away ].addPoints( rules.getPointsForDraw() );
-					self.entries[ fixture.home ].addPoints( rules.getPointsForDraw() );
+					self.entries[ match.away.id ].addPoints( rules.getPointsForDraw() );
+					self.entries[ match.home.id ].addPoints( rules.getPointsForDraw() );
 				} else {
 					throw "Undefined result, neither win, loss or draw.";
 				}
 			}
 		};
 
+		this.getRanking = function() {
+			var ranking = [];
+			for( var i in this.entries ) {
+				ranking.push( this.entries[ i ] );
+			}
+			ranking.sort( rules.tableEntrySorter );
+			return ranking;
+		}
+
 		for( var i in this.tournament.teams ) {
-			this.entries.push( new TableEntry( tournament.teams[ i ] ) );
+			this.entries[ tournament.teams[ i ].id ] = new TableEntry( tournament.teams[ i ] );
 		}
 
 		for( var i in tournament.fixtures.rounds ) {
 			handleRound( tournament.fixtures.rounds[ i ] );
 		}
-		this.entries.sort( rules.tableEntrySorter );
 	};
 	exports.Table = Table;
 })(this);

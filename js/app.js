@@ -4,7 +4,6 @@ window.$ = window.jQuery = require('jquery');
 var bootstrap  = require("bootstrap");
 var Team       = require("./team.js").Team;
 var Match      = require("./match.js").Match;
-var Fixture    = require("./fixture.js").Fixture;
 var Result     = require("./result.js").Result;
 var Rules      = require("./rules.js").Rules;
 var Season     = require("./season.js").Season;
@@ -62,14 +61,15 @@ var FixtureSchedulerRoundRobinTwoLegs = require("./fixtureSchedulerRoundRobinTwo
 		var table = new Table( tournament, rules );
 		var el = $( "#table tbody" );
 		el.empty();
-		for( var i = 0; i < table.entries.length; i++ ) {
+		var ranking = table.getRanking();
+		for( var i = 0; i < ranking.length; i++ ) {
 			var row = $( "<tr></tr>" );
 			row.append( $( "<td></td>" ).text( i + 1 ) );
-			row.append( $( "<td></td>" ).text( table.entries[ i ].team.name ) );
-			row.append( $( "<td></td>" ).text( table.entries[ i ].gamesPlayed ) );
-			row.append( $( "<td></td>" ).text( table.entries[ i ].goalsFor ) );
-			row.append( $( "<td></td>" ).text( table.entries[ i ].goalsAgainst ) );
-			row.append( $( "<td></td>" ).text( table.entries[ i ].points ) );
+			row.append( $( "<td></td>" ).text( ranking[ i ].team.name ) );
+			row.append( $( "<td></td>" ).text( ranking[ i ].gamesPlayed ) );
+			row.append( $( "<td></td>" ).text( ranking[ i ].goalsFor ) );
+			row.append( $( "<td></td>" ).text( ranking[ i ].goalsAgainst ) );
+			row.append( $( "<td></td>" ).text( ranking[ i ].points ) );
 			el.append( row );
 		}
 	};

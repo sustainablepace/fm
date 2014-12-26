@@ -2,18 +2,13 @@
 	"use strict";
 	
 	var Match   = require("./match.js").Match;
-	var Fixture = require("./fixture.js").Fixture;
 	var Fixtures = require("./fixtures.js").Fixtures;
 	var Round   = require("./round.js").Round;	
 	var FixtureScheduler = require("./fixtureScheduler.js").FixtureScheduler;
 
 	var FixtureSchedulerRoundRobinTwoLegs = function() {
 		var createFixture = function( teams, home, away ) {
-			return new Fixture( 
-				new Match( teams[ home ], teams[ away ] ), 
-				home, 
-				away 
-			);
+			return new Match( teams[ home ], teams[ away ] );
 		};
 
 		var createFixtures = function( rounds ) {

@@ -24,9 +24,9 @@
 					continue;
 				}
 				for( var j in round.fixtures ) {
-					var fixture = round.fixtures[ j ];
-					if( !fixture.match.isPlayed() ) {
-						fixture.match.play( resultCalculator );
+					var match = round.fixtures[ j ];
+					if( !match.isPlayed() ) {
+						match.play( resultCalculator );
 					}
 				}
 				break;
@@ -37,9 +37,9 @@
 			for( var i in this.rounds ) {
 				var round = this.rounds[ i ];
 				for( var j in round.fixtures ) {
-					var fixture = round.fixtures[ j ];
-					if( !fixture.match.isPlayed() ) {
-						fixture.match.play( resultCalculator );
+					var match = round.fixtures[ j ];
+					if( !match.isPlayed() ) {
+						match.play( resultCalculator );
 					}
 				}
 			}
