@@ -26,34 +26,40 @@ var FixtureSchedulerRoundRobinTwoLegs = require("./fixtureSchedulerRoundRobinTwo
 	var teams = [];
 	var tournament;
 
-	var createHandler = function() {
+	var createSeason = function() {
 		season = new Season( year, calendar );
 		tournament = new Tournament( 'BL3', season, scheduler, resultCalculator );
 		tournament.setTeams( teams );
-		season.registerTournament( tournament );
-		var table = new Table( tournament, rules );
-		updateTable( table );
-//		$( "#matchday" ).text( season.now.format( 'MMM Do YYYY' ) );
+	};
+
+	var createHandler = function() {
+		createSeason();
+		updateTable();
 	};
 	var nextMatchHandler = function() {
 		if( !(season instanceof Season) ) {
 			throw "Create a season first.";
 		}
 		season.next();
-		updateTable( new Table( tournament, rules ) );
-//		$( "#matchday" ).text( season.now.format( 'MMM Do YYYY' ) );
+		updateTable();
 		
 	};
 	var endSeasonHandler = function() {
-		var season = league.getCurrentSeason();
 		if( !(season instanceof Season) ) {
 			throw "Create a season first.";
 		}
-		season.next();
-		updateTable( new Table( tournament, rules ) );
-		
+		while( !season.isFinished() ) {
+			season.next();
+		}
+		updateTable();
+
+		year++;
+		createSeason();
 	};
 	var updateTable = function( table ) {
+		$( "#matchday" ).text( season.getDate().format( 'MMM Do YYYY' ) );
+
+		var table = new Table( tournament, rules );
 		var el = $( "#table tbody" );
 		el.empty();
 		for( var i = 0; i < table.entries.length; i++ ) {

@@ -1,6 +1,7 @@
 (function(exports) {
 	"use strict";
 	var moment = require('moment');
+	var Tournament  = require("./tournament.js").Tournament;
 
 	var Season = function( year, calendarJson ) {
 		var self = this;
@@ -8,7 +9,7 @@
 		this.startDate = moment( year + '-W28-1' );
 		this.endDate   = moment( this.startDate ).add( 1, 'y' ).subtract( 1, 'd' );
 
-		this.tournaments    = {};
+		this.tournaments    = null;
 		this.year           = year;
 		this.calendar       = [];
 		this.now            = 0;	
@@ -49,26 +50,59 @@
 		
 		this.registerTournament = function( tournament ) {
 			if( this.isSchedulable( tournament ) ) {
+				if( this.tournaments === null ) {
+					this.tournaments = {};
+				}
 				this.tournaments[ tournament.id ] = tournament;
 			}
 		};
 		
 		this.unregisterTournament = function( tournament ) {
-			if( this.tournaments[ tournament.id ] ) {
+			if( this.isRegisteredTournament( tournament ) ) {
 				delete this.tournaments[ tournament.id ];
 			}
 		};
 		
-		this.next = function() {
-			var events = this.calendar[ this.now ];
-			if( events ) {
-				for( var i in events ) {
-					if( this.tournaments[ events[ i ] ] ) {
-						this.tournaments[ events[ i ] ].playNext.apply( this.tournaments[ events[ i ] ], [] );
+		this.isFinished = function() {
+			return this.now > this.calendar.length - 1;
+		};
+
+		this.isRegisteredTournament = function( tournament ) {
+			return this.tournaments !== null && this.tournaments[ tournament.id ] instanceof Tournament;
+		};
+
+		this.fastForward = function() {
+			while( !this.isFinished() ) {
+				var events = this.calendar[ this.now ];
+				if( events ) {
+					for( var i in events ) {
+						if( this.tournaments !== null && this.tournaments[ events[ i ] ] ) {
+							return this;
+						}
 					}
-				}
-			}			
-			this.now++;
+				}			
+				this.now++;
+			}
+			return this;
+		};
+
+		this.getDate = function() {
+			return moment( this.startDate ).add( this.now, 'd' );
+		};
+
+		this.next = function() {
+			if( !this.isFinished() ) {
+				this.fastForward();
+				var events = this.calendar[ this.now ];
+				if( events ) {
+					for( var i in events ) {
+						if( this.tournaments !== null && this.tournaments[ events[ i ] ] ) {
+							this.tournaments[ events[ i ] ].playNext.apply( this.tournaments[ events[ i ] ], [] );
+						}
+					}
+				}			
+				this.now++;
+			}
 		}
 		
 	};
