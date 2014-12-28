@@ -9,6 +9,8 @@ var Rules      = require("./rules.js").Rules;
 var Season     = require("./season.js").Season;
 var Round     = require("./round.js").Round;
 var Tournament = require("./tournament.js").Tournament;
+var TournamentProxy = require("./tournamentProxy.js").TournamentProxy;
+var TournamentProxyRule = require("./tournamentProxyRule.js").TournamentProxyRule;
 var Table      = require("./table.js").Table;
 var TableEntry = require("./tableEntry.js").TableEntry;
 var TeamFactoryJson = require("./teamFactoryJson.js").TeamFactoryJson;
@@ -31,12 +33,35 @@ var FixtureSchedulerRoundRobinTwoLegs = require("./fixtureSchedulerRoundRobinTwo
 
 	var createSeason = function() {
 		season = new Season( year, calendar );
-		tournamentBl3 = new Tournament( 'BL3', season, scheduler, resultCalculator );
-		tournamentBl3.setTeams( teamsBl3 );
-		tournamentBl2 = new Tournament( 'BL2', season, scheduler, resultCalculator );
-		tournamentBl2.setTeams( teamsBl2 );
-		tournamentBl1 = new Tournament( 'BL1', season, scheduler, resultCalculator );
-		tournamentBl1.setTeams( teamsBl1 );
+		if( tournamentBl3 instanceof Tournament && tournamentBl2 instanceof Tournament && tournamentBl1 instanceof Tournament ) {
+			var proxy = new TournamentProxy();
+			var nextBl3 = new Tournament( 'BL3', season, scheduler, resultCalculator );
+			var nextBl2 = new Tournament( 'BL2', season, scheduler, resultCalculator );
+			var nextBl1 = new Tournament( 'BL1', season, scheduler, resultCalculator );
+
+			proxy.addRule( new TournamentProxyRule( [ tournamentBl1 ], [ nextBl1 ], [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ], rules ) );
+			proxy.addRule( new TournamentProxyRule( [ tournamentBl1 ], [ nextBl2 ], [ -1, -2, -3 ], rules ) );
+			proxy.addRule( new TournamentProxyRule( [ tournamentBl2 ], [ nextBl1 ], [ 1, 2, 3 ], rules ) );
+			proxy.addRule( new TournamentProxyRule( [ tournamentBl2 ], [ nextBl2 ], [ 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ], rules ) );
+			proxy.addRule( new TournamentProxyRule( [ tournamentBl2 ], [ nextBl3 ], [ -1, -2, -3 ], rules ) );
+			proxy.addRule( new TournamentProxyRule( [ tournamentBl3 ], [ nextBl2 ], [ 1, 2, 3 ], rules ) );
+			proxy.addRule( new TournamentProxyRule( [ tournamentBl3 ], [ nextBl3 ], [ 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ], rules ) );
+			proxy.proxy();
+			
+			tournamentBl1 = nextBl1;
+			tournamentBl2 = nextBl2;
+			tournamentBl3 = nextBl3;
+			tournamentBl1.schedule();
+			tournamentBl2.schedule();
+			tournamentBl3.schedule();
+		} else {
+			tournamentBl3 = new Tournament( 'BL3', season, scheduler, resultCalculator );
+			tournamentBl3.addTeams( teamsBl3 ).schedule();
+			tournamentBl2 = new Tournament( 'BL2', season, scheduler, resultCalculator );
+			tournamentBl2.addTeams( teamsBl2 ).schedule();
+			tournamentBl1 = new Tournament( 'BL1', season, scheduler, resultCalculator );
+			tournamentBl1.addTeams( teamsBl1 ).schedule();
+		}
 	};
 
 	var createHandler = function() {

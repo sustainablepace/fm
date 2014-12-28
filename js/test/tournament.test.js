@@ -37,7 +37,7 @@ describe('Tournament', function(){
 		tournament.resultCalculator.should.eql( calculator );
 
 		tournament.should.have.property( 'teams' );
-		(tournament.teams === null).should.be.true;
+		tournament.teams.should.be.an.Array.with.lengthOf( 0 );
 	});
   });
   describe('setTeams', function() {
@@ -58,7 +58,7 @@ describe('Tournament', function(){
 		var tournament = new Tournament( 'BL1', season, scheduler, calculator );
 		var teamFactory = new TeamFactoryRandom();
 		var teams = teamFactory.get( 4 );
-		tournament.setTeams( teams );
+		tournament.addTeams( teams );
 
 		tournament.should.have.property( 'teams' );
 		tournament.teams.should.eql( teams );

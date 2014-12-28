@@ -103,7 +103,13 @@
 				}			
 				this.now++;
 			}
-		}
+		};
+		
+		this.playAll = function() {
+			while( !this.isFinished() ) {
+				this.next();
+			}
+		};
 		
 	};
 

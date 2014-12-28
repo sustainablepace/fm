@@ -7,6 +7,7 @@
 
 		this.tournament  = tournament;
 		this.entries     = {};
+		this.ranking     = null;
 
 		var handleRound = function( round ) {
 			for( var j in round.fixtures ) {
@@ -47,13 +48,29 @@
 		};
 
 		this.getRanking = function() {
-			var ranking = [];
-			for( var i in this.entries ) {
-				ranking.push( this.entries[ i ] );
+			if( this.ranking === null ) {
+				var ranking = [];
+				for( var i in this.entries ) {
+					ranking.push( this.entries[ i ] );
+				}
+				ranking.sort( rules.tableEntrySorter );
+				this.ranking = ranking;
 			}
-			ranking.sort( rules.tableEntrySorter );
-			return ranking;
-		}
+			return this.ranking;
+		};
+
+		this.pick = function( pos ) {
+			var ranking = this.getRanking();
+			if( pos > 0 && pos <= ranking.length ) {
+				var entry = ranking[ pos - 1 ];
+				return entry.team;
+			}
+			else if( pos < 0 && pos >= -1 * ranking.length ) {
+				var entry = ranking[ ranking.length + pos ];
+				return entry.team;
+			}
+			throw "Cannot pick team at position " + pos + ". The table has " + ranking.length + " entries.";
+		};
 
 		for( var i in this.tournament.teams ) {
 			this.entries[ tournament.teams[ i ].id ] = new TableEntry( tournament.teams[ i ] );

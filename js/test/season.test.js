@@ -58,7 +58,8 @@ describe('Season', function(){
 		var tournament = new Tournament( 'BL1', season, scheduler, calculator );
 		var teamFactory = new TeamFactoryRandom();
 		var teams = teamFactory.get( 4 );
-		tournament.setTeams( teams );
+		tournament.addTeams( teams );
+		tournament.schedule();
 		season.isSchedulable( tournament ).should.be.true;
     });
   });
@@ -71,7 +72,8 @@ describe('Season', function(){
 		season.isRegisteredTournament( tournament ).should.be.false;
 		var teamFactory = new TeamFactoryRandom();
 		var teams = teamFactory.get( 4 );
-		tournament.setTeams( teams );
+		tournament.addTeams( teams );
+		tournament.schedule();
 		season.isRegisteredTournament( tournament ).should.be.true;
     });
   });
@@ -83,7 +85,8 @@ describe('Season', function(){
 		var tournament = new Tournament( 'BL1', season, scheduler, calculator );
 		var teamFactory = new TeamFactoryRandom();
 		var teams = teamFactory.get( 4 );
-		tournament.setTeams( teams );
+		tournament.addTeams( teams );
+		tournament.schedule();
 		season.fastForward().should.be.instanceOf( Season );
 		season.now.should.not.eql( 0 );
 		season.getDate().format( 'W-E' ).should.eql( '50-6' );
