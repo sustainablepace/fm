@@ -40,6 +40,22 @@
 		this.fixtures.playNext( this.config.getResultCalculator() );
 	};
 
+	Tournament.prototype.getNextRound = function() {
+		var id = this.fixtures.getNextRoundNumber();
+		if( id === null ) {
+			return null;
+		}
+		return this.fixtures.getRound( id );
+	};
+
+	Tournament.prototype.getLastRound = function() {
+		var id = this.fixtures.getNextRoundNumber();
+		if( id === null ) {
+			return null;
+		}
+		return this.fixtures.getRound( id - 1 );
+	};
+
 	Tournament.prototype.isFinished = function() {
 		return this.fixtures instanceof Fixtures && this.fixtures.isFinished();
 	};

@@ -29,4 +29,15 @@ describe('Fixtures', function(){
     });
   });
 
+  describe('getNextRoundNumber', function(){
+    it('should increase after each round', function(){
+		sut.addRound( new Round() );
+		sut.addRound( new Round() );
+		sut.addRound( new Round() );
+		sut.getNextRoundNumber().should.eql( 0 );
+		sut.playNext();
+		sut.getNextRoundNumber().should.eql( 1 );
+    });
+  });
+
 });

@@ -10,10 +10,10 @@
 	ResultCalculatorStrengthPlusRandom.prototype.parent = ResultCalculator.prototype;
 
 	ResultCalculatorStrengthPlusRandom.prototype.play = function( match ) {
-		if( match.home.strength + 3 * Math.random() > match.away.strength + 3 * Math.random() ) {
+		if( match.home.strength + 2 * Math.random() > match.away.strength + 2 * Math.random() ) {
 			return new Result( 1, 0 );
 		}
-		else if( match.home.strength  + 3 * Math.random() < match.away.strength  + 3 * Math.random() ) {
+		else if( match.home.strength  + 2 * Math.random() < match.away.strength  + 2 * Math.random() ) {
 			return new Result( 0, 1 );
 		}
 		return new Result( 0, 0 );

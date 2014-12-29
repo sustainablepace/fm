@@ -17,14 +17,14 @@
 		} else if (tableEntry1.points > tableEntry2.points) {
 			return -1;
 		}
-		if (tableEntry1.gf - tableEntry1.ga < tableEntry2.gf - tableEntry2.ga ) {
+		if (tableEntry1.goalsFor - tableEntry1.goalsAgainst < tableEntry2.goalsFor - tableEntry2.goalsAgainst ) {
 			return 1;
-		} else if (tableEntry1.gf - tableEntry1.ga > tableEntry2.gf - tableEntry2.ga ) {
+		} else if (tableEntry1.goalsFor - tableEntry1.goalsAgainst > tableEntry2.goalsFor - tableEntry2.goalsAgainst ) {
 			return -1;
 		}
-		if (tableEntry1.gf < tableEntry2.gf ) {
+		if (tableEntry1.goalsFor < tableEntry2.goalsFor ) {
 			return 1;
-		} else if (tableEntry1.gf > tableEntry2.ga ) {
+		} else if (tableEntry1.goalsFor > tableEntry2.goalsFor ) {
 			return -1;
 		}
 		return 0;
