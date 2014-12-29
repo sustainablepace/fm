@@ -2,9 +2,13 @@
 	"use strict";
 	
 	var Fixtures = function() {
-		this.rounds  = [];
-		
+		this.init();
 	};
+	
+	Fixtures.prototype.init = function() {
+		this.rounds  = [];
+	};
+	
 	Fixtures.prototype.addRound = function( round ) {
 		this.rounds.push( round );
 	};

@@ -1,32 +1,48 @@
 var assert = require("assert");
 var should = require("should");
-var Team   = require("../team.js").Team;
-var Match  = require("../match.js").Match;
+
+var Match = require("../match.js").Match;
+
+var Team = require("../team.js").Team;
 var Result = require("../result.js").Result;
 var ResultCalculatorDeterministic = require("../resultCalculatorDeterministic.js").ResultCalculatorDeterministic;
+
 describe('Match', function(){
-  describe('attr', function(){
+
+  var sut = null;
+  var home = null;
+  var away = null;
+  var resultCalculator = null;
+
+  beforeEach( function() {
+	home = new Team();
+	away = new Team();
+	sut = new Match( home, away );
+	resultCalculator = new ResultCalculatorDeterministic();
+  } );
+  
+  afterEach( function() {
+	sut = null;
+	home = null;
+	away = null;
+	resultCalculator = null;
+  } );
+  
+  describe('constructor', function(){
     it('should have a home and away team', function(){
-		var home = new Team();
-		var away = new Team();
-		var match = new Match( home, away );
-		match.should.have.property( 'home' );
-        	match.home.should.eql( home );
-		match.should.have.property( 'away' );
-	        match.away.should.eql( away );
-		match.should.have.property( 'result' );
-        	(match.result === null).should.be.true;
+		sut.should.have.property( 'home' );
+        sut.home.should.eql( home );
+		sut.should.have.property( 'away' );
+	    sut.away.should.eql( away );
+		sut.should.have.property( 'result' );
+        (sut.result === null).should.be.true;
     });
   });
   describe('play', function(){
     it('should lead to a result', function(){
-		var home = new Team();
-		var away = new Team();
-		var match = new Match( home, away );
-		var resultCalculator = new ResultCalculatorDeterministic();
-		match.play( resultCalculator );
-		match.should.have.property( 'result' );
-        match.result.should.be.an.instanceOf( Result );
+		sut.play( resultCalculator );
+		sut.should.have.property( 'result' );
+        sut.result.should.be.an.instanceOf( Result );
     });
   });
 });

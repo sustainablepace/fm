@@ -1,17 +1,19 @@
 "use strict";
 
 window.$ = window.jQuery = require('jquery');
-var bootstrap  = require("bootstrap");
-var Team       = require("./team.js").Team;
-var Match      = require("./match.js").Match;
-var Result     = require("./result.js").Result;
-var Rules      = require("./rules.js").Rules;
-var Season     = require("./season.js").Season;
-var Round     = require("./round.js").Round;
+var bootstrap = require("bootstrap");
+
+var Team = require("./team.js").Team;
+var Match = require("./match.js").Match;
+var Result = require("./result.js").Result;
+var Rules = require("./rules.js").Rules;
+var Season = require("./season.js").Season;
+var Round = require("./round.js").Round;
 var Tournament = require("./tournament.js").Tournament;
+var TournamentConfig = require("./tournamentConfig.js").TournamentConfig;
 var TournamentProxy = require("./tournamentProxy.js").TournamentProxy;
 var TournamentProxyRule = require("./tournamentProxyRule.js").TournamentProxyRule;
-var Table      = require("./table.js").Table;
+var Table = require("./table.js").Table;
 var TableEntry = require("./tableEntry.js").TableEntry;
 var TeamFactoryJson = require("./teamFactoryJson.js").TeamFactoryJson;
 var ResultCalculatorStrengthPlusRandom = require("./resultCalculatorStrengthPlusRandom.js").ResultCalculatorStrengthPlusRandom;
@@ -30,22 +32,23 @@ var FixtureSchedulerRoundRobinTwoLegs = require("./fixtureSchedulerRoundRobinTwo
 	var tournamentBl3;
 	var tournamentBl2;
 	var tournamentBl1;
+	var config = new TournamentConfig( scheduler, resultCalculator, rules );
 
 	var createSeason = function() {
 		season = new Season( year, calendar );
 		if( tournamentBl3 instanceof Tournament && tournamentBl2 instanceof Tournament && tournamentBl1 instanceof Tournament ) {
 			var proxy = new TournamentProxy();
-			var nextBl3 = new Tournament( 'BL3', season, scheduler, resultCalculator );
-			var nextBl2 = new Tournament( 'BL2', season, scheduler, resultCalculator );
-			var nextBl1 = new Tournament( 'BL1', season, scheduler, resultCalculator );
+			var nextBl3 = new Tournament( 'BL3', season, config );
+			var nextBl2 = new Tournament( 'BL2', season, config );
+			var nextBl1 = new Tournament( 'BL1', season, config );
 
-			proxy.addRule( new TournamentProxyRule( [ tournamentBl1 ], [ nextBl1 ], [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ], rules ) );
-			proxy.addRule( new TournamentProxyRule( [ tournamentBl1 ], [ nextBl2 ], [ -1, -2, -3 ], rules ) );
-			proxy.addRule( new TournamentProxyRule( [ tournamentBl2 ], [ nextBl1 ], [ 1, 2, 3 ], rules ) );
-			proxy.addRule( new TournamentProxyRule( [ tournamentBl2 ], [ nextBl2 ], [ 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ], rules ) );
-			proxy.addRule( new TournamentProxyRule( [ tournamentBl2 ], [ nextBl3 ], [ -1, -2, -3 ], rules ) );
-			proxy.addRule( new TournamentProxyRule( [ tournamentBl3 ], [ nextBl2 ], [ 1, 2, 3 ], rules ) );
-			proxy.addRule( new TournamentProxyRule( [ tournamentBl3 ], [ nextBl3 ], [ 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ], rules ) );
+			proxy.addRule( new TournamentProxyRule( [ tournamentBl1 ], [ nextBl1 ], [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ] ) );
+			proxy.addRule( new TournamentProxyRule( [ tournamentBl1 ], [ nextBl2 ], [ -1, -2, -3 ] ) );
+			proxy.addRule( new TournamentProxyRule( [ tournamentBl2 ], [ nextBl1 ], [ 1, 2, 3 ] ) );
+			proxy.addRule( new TournamentProxyRule( [ tournamentBl2 ], [ nextBl2 ], [ 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ] ) );
+			proxy.addRule( new TournamentProxyRule( [ tournamentBl2 ], [ nextBl3 ], [ -1, -2, -3 ] ) );
+			proxy.addRule( new TournamentProxyRule( [ tournamentBl3 ], [ nextBl2 ], [ 1, 2, 3 ] ) );
+			proxy.addRule( new TournamentProxyRule( [ tournamentBl3 ], [ nextBl3 ], [ 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ] ) );
 			proxy.proxy();
 			
 			tournamentBl1 = nextBl1;
@@ -55,11 +58,11 @@ var FixtureSchedulerRoundRobinTwoLegs = require("./fixtureSchedulerRoundRobinTwo
 			tournamentBl2.schedule();
 			tournamentBl3.schedule();
 		} else {
-			tournamentBl3 = new Tournament( 'BL3', season, scheduler, resultCalculator );
+			tournamentBl3 = new Tournament( 'BL3', season, config );
 			tournamentBl3.addTeams( teamsBl3 ).schedule();
-			tournamentBl2 = new Tournament( 'BL2', season, scheduler, resultCalculator );
+			tournamentBl2 = new Tournament( 'BL2', season, config );
 			tournamentBl2.addTeams( teamsBl2 ).schedule();
-			tournamentBl1 = new Tournament( 'BL1', season, scheduler, resultCalculator );
+			tournamentBl1 = new Tournament( 'BL1', season, config );
 			tournamentBl1.addTeams( teamsBl1 ).schedule();
 		}
 	};
@@ -96,7 +99,7 @@ var FixtureSchedulerRoundRobinTwoLegs = require("./fixtureSchedulerRoundRobinTwo
 	var updateTable = function( tournament ) {
 		$( "#matchday" ).text( season.getDate().format( 'MMM Do YYYY' ) );
 
-		var table = new Table( tournament, rules );
+		var table = new Table( tournament );
 		var el = $( "#table-" + tournament.id.toLowerCase() + " tbody" );
 		el.empty();
 		var ranking = table.getRanking();

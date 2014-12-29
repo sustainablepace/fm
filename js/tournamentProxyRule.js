@@ -3,14 +3,10 @@
 
 	var Table = require("./table.js").Table;
 
-	var TournamentProxyRule = function( previousTournaments, nextTournaments, positions, rules ) {
-		var self = this;
-
+	var TournamentProxyRule = function( previousTournaments, nextTournaments, positions ) {
 		this.previousTournaments = previousTournaments;
 		this.nextTournaments = nextTournaments;
 		this.positions = positions;
-		this.rules = rules;
-		
 	};
 
 	TournamentProxyRule.prototype.pick = function() {
@@ -19,7 +15,7 @@
 			var pos = this.positions[ i ];
 			for( var j in this.previousTournaments ) {
 				var tournament = this.previousTournaments[ j ];
-				var table = new Table( tournament, this.rules );
+				var table = new Table( tournament );
 				teams.push( table.pick( pos ) );
 			}
 		}

@@ -1,17 +1,30 @@
 var assert = require("assert");
 var should = require("should");
-var Team   = require("../team.js").Team;
-var Round   = require("../round.js").Round;
+
 var FixtureSchedulerRoundRobinTwoLegs = require("../fixtureSchedulerRoundRobinTwoLegs.js").FixtureSchedulerRoundRobinTwoLegs;
+
+var Round = require("../round.js").Round;
 var TeamFactoryRandom = require("../teamFactoryRandom.js").TeamFactoryRandom;
 
 describe('FixtureSchedulerRoundRobinTwoLegs', function(){
+  
+  var sut = null;
+  var factory = new TeamFactoryRandom();
+  var teams = null;
+
+  beforeEach( function() {
+	sut = new FixtureSchedulerRoundRobinTwoLegs();
+	teams = factory.get( 4 );
+  } );
+  
+  afterEach( function() {
+	sut = null;
+	teams = null;
+  } );
+  
   describe('schedule', function(){
     it('returns fixtures in correct order', function(){
-		var factory = new TeamFactoryRandom();
-		var teams = factory.get( 4 );
-		var scheduler = new FixtureSchedulerRoundRobinTwoLegs();
-		var fixtures = scheduler.schedule( teams );
+		var fixtures = sut.schedule( teams );
 		fixtures.should.have.property( 'rounds' );
 		fixtures.rounds.should.be.an.Array.with.lengthOf( 6 );
 		fixtures.rounds.should.matchEach( function( it ) { it.should.be.instanceOf( Round ) } );

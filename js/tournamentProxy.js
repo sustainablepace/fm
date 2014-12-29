@@ -4,10 +4,13 @@
 	var TournamentProxyRule = require("./tournamentProxyRule.js").TournamentProxyRule;
 
 	var TournamentProxy = function() {
-		var self = this;
-
+		this.init();
+	};
+	
+	TournamentProxy.prototype.init = function() {
 		this.rules = [];
 	};
+	
 	TournamentProxy.prototype.addRule = function( rule ) {
 		if( rule instanceof TournamentProxyRule ) {
 			this.rules.push( rule );

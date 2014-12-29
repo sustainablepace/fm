@@ -2,8 +2,10 @@
 	"use strict";
 
 	var Rules = function() {
-		var self = this;
-
+		this.init();
+	};
+	
+	Rules.prototype.init = function() {
 		this.POINTS_WIN  = 3;
 		this.POINTS_DRAW = 1;
 		this.POINTS_LOSS = 0;
