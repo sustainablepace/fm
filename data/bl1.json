@@ -1,55 +1,73 @@
 [{
-	"name": "Bayern München"
+	"name": "Bayern München",
+	"strength": 0.99
 },
 {
-	"name": "VfL Wolfsburg"
+	"name": "VfL Wolfsburg",
+	"strength": 0.8
 },
 {
-	"name": "Bayer 04 Leverkusen"
+	"name": "Bayer 04 Leverkusen",
+	"strength": 0.8
 },
 {
-	"name": "Bor. Mönchengladbach"
+	"name": "Bor. Mönchengladbach",
+	"strength": 0.8
 },
 {
-	"name": "FC Schalke 04"
+	"name": "FC Schalke 04",
+	"strength": 0.8
 },
 {
-	"name": "FC Augsburg"
+	"name": "FC Augsburg",
+	"strength": 0.7
 },
 {
-	"name": "TSG Hoffenheim"
+	"name": "TSG Hoffenheim",
+	"strength": 0.7
 },
 {
-	"name": "Hannover 96"
+	"name": "Hannover 96",
+	"strength": 0.7
 },
 {
-	"name": "Eintracht Frankfurt"
+	"name": "Eintracht Frankfurt",
+	"strength": 0.6
 },
 {
-	"name": "SC Paderborn 07"
+	"name": "SC Paderborn 07",
+	"strength": 0.6
 },
 {
-	"name": "1. FC Köln"
+	"name": "1. FC Köln",
+	"strength": 0.6
 },
 {
-	"name": "1. FSV Mainz"
+	"name": "1. FSV Mainz",
+	"strength": 0.6
 },
 {
-	"name": "Hertha BSC"
+	"name": "Hertha BSC",
+	"strength": 0.6
 },
 {
-	"name": "Hamburger SV"
+	"name": "Hamburger SV",
+	"strength": 0.6
 },
 {
-	"name": "VfB Stuttgart"
+	"name": "VfB Stuttgart",
+	"strength": 0.6
 },
 {
-	"name": "Werder Bremen"
+	"name": "Werder Bremen",
+	"strength": 0.6
 },
 {
-	"name": "Borussia Dortmund"
+	"name": "Borussia Dortmund",
+	"strength": 0.8
 },
 {
-	"name": "SC Freiburg"
+	"name": "SC Freiburg",
+	"strength": 0.6
 }]
 

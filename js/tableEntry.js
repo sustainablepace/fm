@@ -36,7 +36,7 @@
 			}
 			else if( rules.isDraw( res ) ) {
 				this.addPoints( rules.getPointsForDraw() );
-				rules.addDraw();
+				this.addDraw();
 			} else {
 				throw "Undefined result, neither win, loss or draw.";
 			}

@@ -1,60 +1,80 @@
 [{
-	"name": "Arminia Bielefeld"
+	"name": "Arminia Bielefeld",
+	"strength": 0.4
 },
 {
-	"name": "Dynamo Dresden"
+	"name": "Dynamo Dresden",
+	"strength": 0.4
 },
 {
-	"name": "Energie Cottbus"
+	"name": "Energie Cottbus",
+	"strength": 0.4
 },
 {
-	"name": "Jahn Regensburg"
+	"name": "Jahn Regensburg",
+	"strength": 0.3
 },
 {
-	"name": "MSV Duisburg"
+	"name": "MSV Duisburg",
+	"strength": 0.4
 },
 {
-	"name": "Hansa Rostock"
+	"name": "Hansa Rostock",
+	"strength": 0.3
 },
 {
-	"name": "VfL Osnabrück"
+	"name": "VfL Osnabrück",
+	"strength": 0.4
 },
 {
-	"name": "SV Wehen Wiesbaden"
+	"name": "SV Wehen Wiesbaden",
+	"strength": 0.3
 },
 {
-	"name": "VfB Stuttgart II"
+	"name": "Kickers Offenbach",
+	"strength": 0.2
 },
 {
-	"name": "Rot-Weiß Erfurt"
+	"name": "Rot-Weiß Erfurt",
+	"strength": 0.1
 },
 {
-	"name": "Chemnitzer FC"
+	"name": "Chemnitzer FC",
+	"strength": 0.2
 },
 {
-	"name": "SpVgg Unterhaching"
+	"name": "SpVgg Unterhaching",
+	"strength": 0.2
 },
 {
-	"name": "Preußen Münster"
+	"name": "Preußen Münster",
+	"strength": 0.2
 },
 {
-	"name": "Hallescher FC"
+	"name": "Hallescher FC",
+	"strength": 0.1
 },
 {
-	"name": "Borussia Dortmund II"
+	"name": "Rot-Weiss Essen",
+	"strength": 0.1
 },
 {
-	"name": "Stuttgarter Kickers"
+	"name": "Stuttgarter Kickers",
+	"strength": 0.2
 },
 {
-	"name": "Holstein Kiel"
+	"name": "Holstein Kiel",
+	"strength": 0.1
 },
 {
-	"name": "Fortuna Köln"
+	"name": "Fortuna Köln",
+	"strength": 0.2
 },
 {
-	"name": "Sonnenhof Großaspach"
+	"name": "Sonnenhof Großaspach",
+	"strength": 0.3
 },
 {
-	"name": "1. FSV Mainz 05 II"
+	"name": "Alemannia Aachen",
+	"strength": 0.1
 }]

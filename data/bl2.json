@@ -1,55 +1,73 @@
 [{
-	"name": "FC Ingolstadt 04"
+	"name": "FC Ingolstadt 04",
+	"strength": 0.4
 },
 {
-	"name": "Karlsruher SC"
+	"name": "Karlsruher SC",
+	"strength": 0.4
 },
 {
-	"name": "SV Darmstadt 98"
+	"name": "SV Darmstadt 98",
+	"strength": 0.4
 },
 {
-	"name": "Eintracht Braunschweig"
+	"name": "Eintracht Braunschweig",
+	"strength": 0.5
 },
 {
-	"name": "1. FC Kaiserslautern"
+	"name": "1. FC Kaiserslautern",
+	"strength": 0.5
 },
 {
-	"name": "Fortuna Düsseldorf"
+	"name": "Fortuna Düsseldorf",
+	"strength": 0.5
 },
 {
-	"name": "RasenBallsport Leipzig"
+	"name": "RasenBallsport Leipzig",
+	"strength": 0.5
 },
 {
-	"name": "1. FC Nürnberg"
+	"name": "1. FC Nürnberg",
+	"strength": 0.5
 },
 {
-	"name": "1. FC Heidenheim"
+	"name": "1. FC Heidenheim",
+	"strength": 0.4
 },
 {
-	"name": "1. FC Union Berlin"
+	"name": "1. FC Union Berlin",
+	"strength": 0.4
 },
 {
-	"name": "VfL Bochum"
+	"name": "VfL Bochum",
+	"strength": 0.4
 },
 {
-	"name": "SpVgg Greuther Fürth"
+	"name": "SpVgg Greuther Fürth",
+	"strength": 0.4
 },
 {
-	"name": "FSV Frankfurt"
+	"name": "FSV Frankfurt",
+	"strength": 0.3
 },
 {
-	"name": "SV Sandhausen"
+	"name": "SV Sandhausen",
+	"strength": 0.3
 },
 {
-	"name": "1860 München"
+	"name": "1860 München",
+	"strength": 0.4
 },
 {
-	"name": "VfR Aalen"
+	"name": "VfR Aalen",
+	"strength": 0.3
 },
 {
-	"name": "FC St. Pauli"
+	"name": "FC St. Pauli",
+	"strength": 0.4
 },
 {
-	"name": "Erzgebirge Aue"
+	"name": "Erzgebirge Aue",
+	"strength": 0.3
 }]
 

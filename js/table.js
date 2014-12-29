@@ -24,8 +24,10 @@
 			var round = this.tournament.fixtures.rounds[ i ];
 			for( var j in round.fixtures ) {
 				var match = round.fixtures[ j ];
-				this.entries[ match.home.id ].update( match.result, this.tournament.config.getRules(), true );
-				this.entries[ match.away.id ].update( match.result, this.tournament.config.getRules(), false );
+				if( match.isPlayed() ) {
+					this.entries[ match.home.id ].update( match.result, this.tournament.config.getRules(), true );
+					this.entries[ match.away.id ].update( match.result, this.tournament.config.getRules(), false );
+				}
 			}
 		}
 	};
