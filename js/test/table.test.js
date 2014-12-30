@@ -31,11 +31,11 @@ describe('Table', function(){
 	var scheduler = new FixtureSchedulerRoundRobinTwoLegs();
 	var rules = new Rules();
 	var config = new TournamentConfig( scheduler, calculator, rules );
-	var tournament = new Tournament( 'BL1', season, config );
+	var tournament = new Tournament( 'BL1', config );
 	var teamFactory = new TeamFactoryRandom();
 	teams = teamFactory.get( 4 );
 	tournament.addTeams( teams );
-	tournament.schedule();
+	tournament.schedule( season );
 	tournament.fixtures.play( config.getResultCalculator() );
 	
 	sut = new Table( tournament );

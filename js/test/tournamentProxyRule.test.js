@@ -15,7 +15,8 @@ var Table = require("../table.js").Table;
 
 describe('TournamentProxyRule', function(){
   var sut = null;
-  var tournamentNext = null;
+  var tournamentBl1 = null;
+  var tournamentBl2 = null;
   var tournamentPrevTable = null;
 
   beforeEach( function() {
@@ -31,40 +32,48 @@ describe('TournamentProxyRule', function(){
 			'W8-6': ['BL1']\
 		}";
 		var season = new Season( 2015, json );
-
 		var scheduler = new FixtureSchedulerRoundRobinTwoLegs();
 		var calculator = new ResultCalculatorDeterministic();
 		var rules = new Rules();
 		var config = new TournamentConfig( scheduler, calculator, rules );
 
-		var tournament = new Tournament( 'BL1', season, config );
+		tournamentBl1 = new Tournament( 'BL1', config );
 
 		var size = 4;
 		var factory = new TeamFactoryRandom();
 		var teams = factory.get( size );
-		tournament.addTeams( teams );
-		tournament.schedule();
+		tournamentBl1.addTeams( teams );
+		tournamentBl1.schedule( season );
 		season.playAll();
-		tournamentPrevTable = new Table( tournament );
+		tournamentPrevTable = new Table( tournamentBl1 );
 
 		var season = new Season( 2016, json );
-		tournamentNext = new Tournament( 'BL2', season, config );
+		tournamentBl2 = new Tournament( 'BL2', config );
 		
-		sut = new TournamentProxyRule( [ tournament ], [ tournamentNext ], [ -1, -2 ], rules );
+		sut = new TournamentProxyRule( [ 'BL1' ], [ 'BL2' ], [ -1, -2 ] );
   } );
   
   afterEach( function() {
 	sut = null;
-	tournamentNext = null;
+	tournamentBl1 = null;
+	tournamentBl2 = null;
 	tournamentPrevTable = null;
   } );
   
   describe('proxy', function(){
     it('should relegate the last two teams in the league', function(){
-		sut.proxy();
-		tournamentNext.teams.should.be.an.Array.with.lengthOf( 2 );
-		tournamentNext.teams[ 0 ].should.eql( tournamentPrevTable.pick( -1 ) );
-		tournamentNext.teams[ 1 ].should.eql( tournamentPrevTable.pick( -2 ) );
+		var tournamentBl1Next = tournamentBl1.clone();
+		var tournamentBl2Next = tournamentBl2.clone();
+		sut.proxy({
+			'BL1': tournamentBl1,
+			'BL2': tournamentBl2
+		}, {
+			'BL1': tournamentBl1Next,
+			'BL2': tournamentBl2Next
+		});
+		tournamentBl2Next.teams.should.be.an.Array.with.lengthOf( 2 );
+		tournamentBl2Next.teams[ 0 ].should.eql( tournamentPrevTable.pick( -1 ) );
+		tournamentBl2Next.teams[ 1 ].should.eql( tournamentPrevTable.pick( -2 ) );
 
 	});
   });

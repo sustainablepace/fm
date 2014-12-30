@@ -36,12 +36,12 @@ describe('Season', function(){
 	var scheduler = new FixtureSchedulerRoundRobinTwoLegs();
 	var rules = new Rules();
 	config = new TournamentConfig( scheduler, calculator, rules );
-	tournament = new Tournament( 'BL1', sut, config );
+	tournament = new Tournament( 'BL1', config );
 
 	teamFactory = new TeamFactoryRandom();
 	teams = teamFactory.get( 4 );
 	tournament.addTeams( teams );
-	tournament.schedule();
+	tournament.schedule( sut );
   } );
   
   afterEach( function() {
@@ -82,10 +82,10 @@ describe('Season', function(){
   });
   describe('isRegisteredTournament', function(){
     it('should return false first, after registration true', function(){
-		var tournament = new Tournament( 'BL2', sut, config );
+		var tournament = new Tournament( 'BL2', config );
 		sut.isRegisteredTournament( tournament ).should.be.false;
 		tournament.addTeams( teamFactory.get( 2 ) );
-		tournament.schedule();
+		tournament.schedule( sut );
 		sut.isRegisteredTournament( tournament ).should.be.true;
     });
   });

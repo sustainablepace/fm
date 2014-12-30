@@ -3,6 +3,8 @@
 window.$ = window.jQuery = require('jquery');
 var bootstrap = require("bootstrap");
 
+var AssociationFactory = require("./associationFactory.js").AssociationFactory;
+var Association = require("./association.js").Association;
 var Team = require("./team.js").Team;
 var Match = require("./match.js").Match;
 var Result = require("./result.js").Result;
@@ -19,95 +21,62 @@ var TeamFactoryJson = require("./teamFactoryJson.js").TeamFactoryJson;
 var ResultCalculatorStrengthPlusRandom = require("./resultCalculatorStrengthPlusRandom.js").ResultCalculatorStrengthPlusRandom;
 var FixtureSchedulerRoundRobinTwoLegs = require("./fixtureSchedulerRoundRobinTwoLegs.js").FixtureSchedulerRoundRobinTwoLegs;
 
+var tableTemplate = '<table class="table">\
+	<thead>\
+		<th>Pos</th>\
+		<th>Name</th>\
+		<th>Games played</th>\
+		<th>Wins</th>\
+		<th>Draws</th>\
+		<th>Losses</th>\
+		<th>Goals for</th>\
+		<th>Goals against</th>\
+		<th>Points</th>\
+	</thead>\
+	<tbody>\
+	</tbody>\
+</table>';
+
+var roundTemplate = '<table class="table">\
+	<tbody>\
+	</tbody>\
+</table>';
+
+var tabsTemplate = '<div class="panel panel-default">\
+	<div class="panel-heading"></div>\
+	<div class="panel-body">\
+		<div role="tabpanel">\
+		<ul class="nav nav-tabs" role="tablist">\
+			<li class="active" role="presentation"><a href="#" aria-controls="settings" role="tab" data-toggle="tab">Last match</a></li>\
+			<li role="presentation"><a href="#" aria-controls="settings" role="tab" data-toggle="tab">Next match</a></li>\
+			<li role="presentation"><a href="#" aria-controls="settings" role="tab" data-toggle="tab">Table</a></li>\
+		</ul>\
+		<div class="tab-content">\
+			<div role="tabpanel" class="tab-pane active"></div>\
+			<div role="tabpanel" class="tab-pane"></div>\
+			<div role="tabpanel" class="tab-pane"></div>\
+		</div>\
+	</div>\
+  </div>\
+</div>';
+
+
+
 (function($){
 	var calendar;
 	var season;
 	var year = 2014;
-	var rules = new Rules();
-	var resultCalculator = new ResultCalculatorStrengthPlusRandom();
-	var scheduler = new FixtureSchedulerRoundRobinTwoLegs();
-	var teamsBl3 = [];
-	var teamsBl2 = [];
-	var teamsBl1 = [];
-	var tournamentBl3;
-	var tournamentBl2;
-	var tournamentBl1;
-	var config = new TournamentConfig( scheduler, resultCalculator, rules );
-
-	var tableTemplate = '<table class="table">\
-		<thead>\
-			<th>Pos</th>\
-			<th>Name</th>\
-			<th>Games played</th>\
-			<th>Wins</th>\
-			<th>Draws</th>\
-			<th>Losses</th>\
-			<th>Goals for</th>\
-			<th>Goals against</th>\
-			<th>Points</th>\
-		</thead>\
-		<tbody>\
-		</tbody>\
-	</table>';
-
-	var roundTemplate = '<table class="table">\
-		<tbody>\
-		</tbody>\
-	</table>';
-
-	var tabsTemplate = '<div class="panel panel-default">\
-		<div class="panel-heading"></div>\
-		<div class="panel-body">\
-			<div role="tabpanel">\
-			<ul class="nav nav-tabs" role="tablist">\
-				<li class="active" role="presentation"><a href="#" aria-controls="settings" role="tab" data-toggle="tab">Last match</a></li>\
-				<li role="presentation"><a href="#" aria-controls="settings" role="tab" data-toggle="tab">Next match</a></li>\
-				<li role="presentation"><a href="#" aria-controls="settings" role="tab" data-toggle="tab">Table</a></li>\
-			</ul>\
-			<div class="tab-content">\
-				<div role="tabpanel" class="tab-pane active"></div>\
-				<div role="tabpanel" class="tab-pane"></div>\
-				<div role="tabpanel" class="tab-pane"></div>\
-			</div>\
-		</div>\
-	  </div>\
-	</div>';
-
+	var teams = {};
+	var dfb;
 
 	var createSeason = function() {
 		season = new Season( year, calendar );
-		if( tournamentBl3 instanceof Tournament && tournamentBl2 instanceof Tournament && tournamentBl1 instanceof Tournament ) {
-			var proxy = new TournamentProxy();
-			var nextBl3 = new Tournament( 'BL3', season, config );
-			var nextBl2 = new Tournament( 'BL2', season, config );
-			var nextBl1 = new Tournament( 'BL1', season, config );
+		dfb.schedule( season );
+		
+		createView( dfb.getTournament( 'BL1' ) );
+		createView( dfb.getTournament( 'BL2' ) );
+		createView( dfb.getTournament( 'BL3' ) );
 
-			proxy.addRule( new TournamentProxyRule( [ tournamentBl1 ], [ nextBl1 ], [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ] ) );
-			proxy.addRule( new TournamentProxyRule( [ tournamentBl1 ], [ nextBl2 ], [ -1, -2, -3 ] ) );
-			proxy.addRule( new TournamentProxyRule( [ tournamentBl2 ], [ nextBl1 ], [ 1, 2, 3 ] ) );
-			proxy.addRule( new TournamentProxyRule( [ tournamentBl2 ], [ nextBl2 ], [ 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ] ) );
-			proxy.addRule( new TournamentProxyRule( [ tournamentBl2 ], [ nextBl3 ], [ -1, -2, -3 ] ) );
-			proxy.addRule( new TournamentProxyRule( [ tournamentBl3 ], [ nextBl2 ], [ 1, 2, 3 ] ) );
-			proxy.addRule( new TournamentProxyRule( [ tournamentBl3 ], [ nextBl3 ], [ 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ] ) );
-			proxy.proxy();
-			
-			tournamentBl1 = nextBl1;
-			tournamentBl2 = nextBl2;
-			tournamentBl3 = nextBl3;
-			tournamentBl1.schedule();
-			tournamentBl2.schedule();
-			tournamentBl3.schedule();
-		} else {
-			tournamentBl3 = new Tournament( 'BL3', season, config );
-			tournamentBl3.addTeams( teamsBl3 ).schedule();
-			tournamentBl2 = new Tournament( 'BL2', season, config );
-			tournamentBl2.addTeams( teamsBl2 ).schedule();
-			tournamentBl1 = new Tournament( 'BL1', season, config );
-			tournamentBl1.addTeams( teamsBl1 ).schedule();
-		}
-		createView( tournamentBl1 );
-		createView( tournamentBl2 );
-		createView( tournamentBl3 );
 		$( '#season' ).text( year + '/' + ( year + 1 ) );
 	};
 
@@ -128,15 +97,15 @@ var FixtureSchedulerRoundRobinTwoLegs = require("./fixtureSchedulerRoundRobinTwo
 	};
 
 	var updateView = function() {
-		updateTable( tournamentBl3 );
-		updateTable( tournamentBl2 );
-		updateTable( tournamentBl1 );
-		updateLastRound( tournamentBl3 );
-		updateLastRound( tournamentBl2 );
-		updateLastRound( tournamentBl1 );
-		updateNextRound( tournamentBl3 );
-		updateNextRound( tournamentBl2 );
-		updateNextRound( tournamentBl1 );
+		updateTable( dfb.getTournament( 'BL1' ) );
+		updateTable( dfb.getTournament( 'BL2' ) );
+		updateTable( dfb.getTournament( 'BL3' ) );
+		updateLastRound( dfb.getTournament( 'BL1' ) );
+		updateLastRound( dfb.getTournament( 'BL2' ) );
+		updateLastRound( dfb.getTournament( 'BL3' ) );
+		updateNextRound( dfb.getTournament( 'BL1' ) );
+		updateNextRound( dfb.getTournament( 'BL2' ) );
+		updateNextRound( dfb.getTournament( 'BL3' ) );
 	};
 
 	var createHandler = function() {
@@ -214,21 +183,21 @@ var FixtureSchedulerRoundRobinTwoLegs = require("./fixtureSchedulerRoundRobinTwo
 	};
 
 	var init = function() {
+		var associationFactory = new AssociationFactory();
+		dfb = associationFactory.getAssociationGermany( teams );
+		
 		$( "#create" ).on( "click", createHandler );
 		$( "#next" ).on( "click", nextMatchHandler );
 		$( "#end" ).on( "click", endSeasonHandler );
 	};
 	var teamsLoadedBl3 = $.get( "data/bl3.json" ).done( function( data ) {
-		var teamFactory = new TeamFactoryJson();
-		teamsBl3 = teamFactory.get( JSON.stringify( data ) );
+		teams[ 'BL3' ] = data;
 	} );
 	var teamsLoadedBl2 = $.get( "data/bl2.json" ).done( function( data ) {
-		var teamFactory = new TeamFactoryJson();
-		teamsBl2 = teamFactory.get( JSON.stringify( data ) );
+		teams[ 'BL2' ] = data;
 	} );
 	var teamsLoadedBl1 = $.get( "data/bl1.json" ).done( function( data ) {
-		var teamFactory = new TeamFactoryJson();
-		teamsBl1 = teamFactory.get( JSON.stringify( data ) );
+		teams[ 'BL1' ] = data;
 	} );
 	var calendarLoaded = $.get( "data/calendar.json" ).done( function( data ) {
 		calendar = JSON.stringify( data );

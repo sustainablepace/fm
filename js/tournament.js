@@ -3,9 +3,8 @@
 
 	var Fixtures = require("./fixtures.js").Fixtures;
 	
-	var Tournament = function( id, season, tournamentConfig ) {
+	var Tournament = function( id, tournamentConfig ) {
 		this.id = id;
-		this.season = season;
 		this.config = tournamentConfig;
 		
 		this.init();
@@ -30,10 +29,10 @@
 		}
 	};
 
-	Tournament.prototype.schedule = function() {
-		this.season.unregisterTournament( this );
+	Tournament.prototype.schedule = function( season ) {
+		season.unregisterTournament( this );
 		this.fixtures = this.config.getScheduler().schedule( this.teams );
-		this.season.registerTournament( this, this.playNext );
+		season.registerTournament( this, this.playNext );
 	};
 
 	Tournament.prototype.playNext = function() {
@@ -58,6 +57,10 @@
 
 	Tournament.prototype.isFinished = function() {
 		return this.fixtures instanceof Fixtures && this.fixtures.isFinished();
+	};
+	
+	Tournament.prototype.clone = function() {
+		return new Tournament( this.id, this.config );
 	};
 
 	exports.Tournament = Tournament;

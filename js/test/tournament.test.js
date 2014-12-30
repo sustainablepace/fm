@@ -20,20 +20,11 @@ describe('Tournament', function(){
 	var scheduler = new FixtureSchedulerRoundRobinTwoLegs();
 	var rules = new Rules();
 	var config = new TournamentConfig( scheduler, calculator, rules );
-	var json = "{\
-		'W50-3': ['DFB'],\
-		'W50-6': ['BL1'],\
-		'W50-7': ['BL2','BL3'],\
-		'W4-6': ['BL1'],\
-		'W5-6': ['BL1'],\
-		'W6-6': ['BL1'],\
-		'W6-7': ['BL2','BL3'],\
-	  }";
-	var season = new Season( 2015, json );
-	
+
 	var teamFactory = new TeamFactoryRandom();
-	sut = new Tournament( 'BL1', season, config );
 	teams = teamFactory.get( 4 );
+
+	sut = new Tournament( 'BL1', config );
   } );
   
   afterEach( function() {

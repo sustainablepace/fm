@@ -1,7 +1,7 @@
 (function(exports) {
 	"use strict";
 	var moment = require('moment');
-	var Tournament  = require("./tournament.js").Tournament;
+	var Tournament = require("./tournament.js").Tournament;
 
 	var Season = function( year, calendarJson ) {
 		this.year = year;
