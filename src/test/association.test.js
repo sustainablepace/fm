@@ -15,7 +15,6 @@ var TeamFactoryRandom = require("../teamFactoryRandom.js").TeamFactoryRandom;
 var Table = require("../table.js").Table;
 
 describe('Association', function(){
-
   var sut = null;
 
   beforeEach( function() {

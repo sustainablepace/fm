@@ -1,0 +1,70 @@
+Calendar
+- addTournament(Tournament)
+
+
+----
+
+
+Season
+- year
+- Tournament[]
+
+---
+
+Association
+- Tournament[]
+- NationalTeam[]
+- ClubTeam[]
+
+e.g.
+
+Uefa
+- Tournament[Champions League, Euro, Europa League, ...]
+- NationalTeam[Germany, France, England, ...]
+- ClubTeam[FC Bayern, FC Barcelona, Schalke 04, ...]
+
+---
+
+Tournament()
+- Stage[]
+- Proxy[]
+- addTeam(Team)
+
+Euro
+- Stage[Qualifiers, Playoffs, Group Stage, Round of 16, Quarterfinals, Semifinals, Final]
+- Proxy[SelectPlayoff]
+
+---
+
+Proxy
+- Stage[] from
+- Stage[] to
+
+Stage(Team[])
+- FixtureScheduler
+- Group[]
+
+FixtureScheduler
+- schedule(Team[]) : Fixtures
+
+Group
+- Fixtures
+
+Fixtures
+- Round[]
+
+Round
+- Match[]
+
+Match
+- Team home
+- Team away
+- Date 
+- Result
+- play()
+- isPlayed()
+
+Team
+- name
+
+

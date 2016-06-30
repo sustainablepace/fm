@@ -12,6 +12,7 @@
 		this.tournaments = {};
 		this.tournamentProxy = null;
 		this.firstSeason = true;
+
 	};
 
 	Association.prototype.addAssociation = function( association ) {
