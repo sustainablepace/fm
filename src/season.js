@@ -3,21 +3,23 @@
 	var moment = require('moment');
 	var Tournament = require("./tournament.js").Tournament;
 
-	var Season = function( year, calendarJson ) {
+	var Season = function( year, calendarJson, calendar ) {
 		this.year = year;
 		this.calendarJson = calendarJson;
+		this.cal = calendar;
 
 		this.init();
 	};
 
 	Season.prototype.init = function() {
-		this.now = 0;	
+		this.now = 0;
 		this.calendar = [];
 		this.tournaments = null;
 
 		this.startDate = moment( this.year + '-W28-1' );
 		this.endDate = moment( this.startDate ).add( 1, 'y' ).subtract( 1, 'd' );
 
+  //      this.cal.addEvents(eval('(' + this.calendarJson + ')'));
 		this.createCalendar( this.calendarJson );
 	};
 	
@@ -25,7 +27,6 @@
 		this.calendar = [];
 		var cal  = eval('(' + json + ')');
 		var date = moment( this.startDate );
-		var endOfYear = moment( this.startDate ).endOf( 'year' );
 		do {
 			var event = null;
 			var index = 'W' + date.format( 'W-E' );
@@ -60,6 +61,7 @@
 				this.tournaments = {};
 			}
 			this.tournaments[ tournament.id ] = tournament;
+//            this.cal.schedule(tournament);
 		}
 	};
 	
@@ -86,7 +88,7 @@
 						return this;
 					}
 				}
-			}			
+			}
 			this.now++;
 		}
 		return this;

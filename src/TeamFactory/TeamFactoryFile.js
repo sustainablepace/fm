@@ -1,6 +1,8 @@
 (function (exports) {
     "use strict";
     var TeamFactory = require("./TeamFactory.js").TeamFactory;
+    var jQuery = require('jquery');
+
 
     var TeamFactoryFile = function (key, filename) {
         this.init(key, filename);

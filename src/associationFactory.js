@@ -19,18 +19,34 @@
 	AssociationFactory.prototype.init = function() {
 	};
 
-	AssociationFactory.prototype.getAssociationGermany = function( teamObj ) {
+	AssociationFactory.prototype.getAssociationGermany = function( teamObj, calObj ) {
 		var assoc = new Association();
-		
-		var config = new TournamentConfig( 
-			new FixtureSchedulerRoundRobinTwoLegs(), 
-			new ResultCalculatorStrengthPlusRandom(), 
-			new Rules() 
+
+		var configBl1 = new TournamentConfig(
+			new FixtureSchedulerRoundRobinTwoLegs(),
+			new ResultCalculatorStrengthPlusRandom(),
+			new Rules(),
+			calObj[ 'BL1' ]
+
 		);
 
-		assoc.addTournament( new Tournament( 'BL3', config ) )
-			.addTournament( new Tournament( 'BL2', config ) )
-			.addTournament( new Tournament( 'BL1', config ) );
+		var configBl2 = new TournamentConfig(
+			new FixtureSchedulerRoundRobinTwoLegs(),
+			new ResultCalculatorStrengthPlusRandom(),
+			new Rules(),
+			calObj[ 'BL2' ]
+		);
+
+		var configBl3 = new TournamentConfig(
+			new FixtureSchedulerRoundRobinTwoLegs(),
+			new ResultCalculatorStrengthPlusRandom(),
+			new Rules(),
+			calObj[ 'BL3' ]
+		);
+
+		assoc.addTournament( new Tournament( 'BL3', configBl3 ) )
+			.addTournament( new Tournament( 'BL2', configBl2 ) )
+			.addTournament( new Tournament( 'BL1', configBl1 ) );
 			
 		var teamFactory = new TeamFactoryJson();
 		

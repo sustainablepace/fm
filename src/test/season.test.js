@@ -9,6 +9,7 @@ var FixtureSchedulerRoundRobinTwoLegs = require("../fixtureSchedulerRoundRobinTw
 var Rules = require("../rules.js").Rules;
 var TournamentConfig = require("../tournamentConfig.js").TournamentConfig;
 var Tournament = require("../tournament.js").Tournament;
+var Calendar = require("../Calendar.js").Calendar;
 var TeamFactoryRandom = require("../teamFactoryRandom.js").TeamFactoryRandom;
 
 describe('Season', function(){
@@ -17,6 +18,7 @@ describe('Season', function(){
   var teams = null;
   var config = null;
   var teamFactory = null;
+	var calendar = null;
 
   beforeEach( function() {
 	var json = "{\
@@ -30,7 +32,7 @@ describe('Season', function(){
 		'W7-6': ['BL1'],\
 		'W8-6': ['BL1']\
 	}";
-	sut = new Season( 2015, json );
+	sut = new Season( 2015, json, new Calendar(2015) );
 	
 	var calculator = new ResultCalculatorDeterministic();
 	var scheduler = new FixtureSchedulerRoundRobinTwoLegs();
@@ -55,6 +57,7 @@ describe('Season', function(){
   describe('constructor', function(){
     it('should have the correct keys', function(){
 		sut.should.have.property( 'calendar' );
+        sut.cal.should.be.instanceOf(Calendar);
 		sut.calendar.should.be.an.Array.with.lengthOf( 365 );
 		sut.calendar[ 156 ].should.eql( ['DFB'] );
 		sut.calendar[ 159 ].should.eql( ['BL1'] );

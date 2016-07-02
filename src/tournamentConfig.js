@@ -5,7 +5,7 @@
 	var ResultCalculator = require("./resultCalculator.js").ResultCalculator;
 	var Rules = require("./rules.js").Rules;
 
-	var TournamentConfig = function( scheduler, resultCalculator, rules ) {
+	var TournamentConfig = function( scheduler, resultCalculator, rules, calendar ) {
 		if( scheduler instanceof FixtureScheduler ) {
 			this.scheduler = scheduler;
 		} else {
@@ -17,12 +17,14 @@
 		} else {
 			throw "Cannot set resultCalculator, resultCalculator is not a ResultCalculator";
 		}
-		
+
 		if( rules instanceof Rules ) {
 			this.rules = rules;
 		} else {
 			throw "Cannot set rules, rules are not Rules";
 		}
+
+		this.calendar = calendar;
 	};
 	
 	TournamentConfig.prototype.getScheduler = function() {
@@ -35,6 +37,10 @@
 
 	TournamentConfig.prototype.getRules = function() {
 		return this.rules;
+	};
+
+	TournamentConfig.prototype.getCalendar = function() {
+		return this.calendar;
 	};
 
 	exports.TournamentConfig = TournamentConfig;
