@@ -16765,51 +16765,92 @@ return jQuery;
 
 }));
 },{}],16:[function(require,module,exports){
-"use strict";
+(function(exports) {
+	"use strict";
+	var TeamFactory = function() {
+	};
 
-window.$ = window.jQuery = require('jquery');
-var bootstrap = require("bootstrap");
+	exports.TeamFactory = TeamFactory;
+})(this);
 
-var AssociationFactory = require("./associationFactory.js").AssociationFactory;
-var Association = require("./association.js").Association;
-var Team = require("./team.js").Team;
-var Match = require("./match.js").Match;
-var Result = require("./result.js").Result;
-var Rules = require("./rules.js").Rules;
-var Season = require("./season.js").Season;
-var Round = require("./round.js").Round;
-var Tournament = require("./tournament.js").Tournament;
-var TournamentConfig = require("./tournamentConfig.js").TournamentConfig;
-var TournamentProxy = require("./tournamentProxy.js").TournamentProxy;
-var TournamentProxyRule = require("./tournamentProxyRule.js").TournamentProxyRule;
-var Table = require("./table.js").Table;
-var TableEntry = require("./tableEntry.js").TableEntry;
-var TeamFactoryJson = require("./teamFactoryJson.js").TeamFactoryJson;
-var ResultCalculatorStrengthPlusRandom = require("./resultCalculatorStrengthPlusRandom.js").ResultCalculatorStrengthPlusRandom;
-var FixtureSchedulerRoundRobinTwoLegs = require("./fixtureSchedulerRoundRobinTwoLegs.js").FixtureSchedulerRoundRobinTwoLegs;
+},{}],17:[function(require,module,exports){
+(function (exports) {
+    "use strict";
 
-var tableTemplate = '<table class="table">\
-	<thead>\
-		<th>Pos</th>\
-		<th>Name</th>\
-		<th>Games played</th>\
-		<th>Wins</th>\
-		<th>Draws</th>\
-		<th>Losses</th>\
-		<th>Goals for</th>\
-		<th>Goals against</th>\
-		<th>Points</th>\
-	</thead>\
-	<tbody>\
-	</tbody>\
-</table>';
+    var TeamFactoryFile = require("./TeamFactoryFile.js").TeamFactoryFile;
 
-var roundTemplate = '<table class="table">\
-	<tbody>\
-	</tbody>\
-</table>';
+    exports.TeamFactoryBundesliga1 = new TeamFactoryFile('BL1', '/data/bl1.json');
+})(this);
 
-var tabsTemplate = '<div class="panel panel-default">\
+},{"./TeamFactoryFile.js":20}],18:[function(require,module,exports){
+(function (exports) {
+    "use strict";
+
+    var TeamFactoryFile = require("./TeamFactoryFile.js").TeamFactoryFile;
+
+    exports.TeamFactoryBundesliga2 = new TeamFactoryFile('BL2', '/data/bl2.json');
+})(this);
+
+},{"./TeamFactoryFile.js":20}],19:[function(require,module,exports){
+(function (exports) {
+    "use strict";
+
+    var TeamFactoryFile = require("./TeamFactoryFile.js").TeamFactoryFile;
+
+    exports.TeamFactoryBundesliga3 = new TeamFactoryFile('BL3', '/data/bl3.json');
+})(this);
+
+},{"./TeamFactoryFile.js":20}],20:[function(require,module,exports){
+(function (exports) {
+    "use strict";
+    var TeamFactory = require("./TeamFactory.js").TeamFactory;
+
+    var TeamFactoryFile = function (key, filename) {
+        this.init(key, filename);
+    };
+
+    TeamFactoryFile.prototype = new TeamFactory();
+    TeamFactoryFile.prototype.parent = TeamFactory.prototype;
+
+    TeamFactoryFile.prototype.init = function (key, filename) {
+        this.key = key;
+        this.teams = [];
+        this.promise = null;
+        this.promise = jQuery.get(filename).done(this.handler.bind(this));
+    };
+
+    TeamFactoryFile.prototype.handler = function (data) {
+        this.teams = data;
+    };
+
+    TeamFactoryFile.prototype.getKey = function () {
+        return this.key;
+    };
+
+    TeamFactoryFile.prototype.get = function () {
+        return this.teams;
+    };
+
+    TeamFactoryFile.prototype.getPromise = function () {
+        return this.promise;
+    };
+
+    exports.TeamFactoryFile = TeamFactoryFile;
+})(this);
+
+},{"./TeamFactory.js":16}],21:[function(require,module,exports){
+(function (exports) {
+    "use strict";
+
+    var Tournament = require("./../tournament.js").Tournament;
+    var Table = require("./../table.js").Table;
+    var jQuery = require('jquery');
+
+    var TournamentView = function (container, tournament) {
+        this.init(container, tournament);
+    };
+
+    var tabsTemplate = '<div class="panel panel-default">\
 	<div class="panel-heading"></div>\
 	<div class="panel-body">\
 		<div role="tabpanel">\
@@ -16828,155 +16869,185 @@ var tabsTemplate = '<div class="panel panel-default">\
 </div>';
 
 
+    var tableTemplate = '<table class="table">\
+	<thead>\
+		<th>Pos</th>\
+		<th>Name</th>\
+		<th>Games played</th>\
+		<th>Wins</th>\
+		<th>Draws</th>\
+		<th>Losses</th>\
+		<th>Goals for</th>\
+		<th>Goals against</th>\
+		<th>Points</th>\
+	</thead>\
+	<tbody>\
+	</tbody>\
+</table>';
 
-(function($){
-	var calendar;
-	var season;
-	var year = 2014;
-	var teams = {};
-	var dfb;
+    var roundTemplate = '<table class="table">\
+	<tbody>\
+	</tbody>\
+</table>';
 
-	var createSeason = function() {
-		season = new Season( year, calendar );
-		dfb.schedule( season );
-		
-		createView( dfb.getTournament( 'BL1' ) );
-		createView( dfb.getTournament( 'BL2' ) );
-		createView( dfb.getTournament( 'BL3' ) );
 
-		$( '#season' ).text( year + '/' + ( year + 1 ) );
-	};
+    TournamentView.prototype.init = function (el, tournament) {
+        this.tournament = tournament;
+        var container = $(el);
+        var id = this.tournament.id.toLowerCase();
+        if (container.find('#' + id).size() === 0) {
+            var tabs = $(tabsTemplate).attr('id', id);
+            tabs.find('.panel-heading').text(this.tournament.id);
+            tabs.find('a').eq(0).attr('href', '#' + id + '-last');
+            tabs.find('a').eq(1).attr('href', '#' + id + '-next');
+            tabs.find('a').eq(2).attr('href', '#' + id + '-table');
+            tabs.find('.tab-pane').eq(0).attr('id', id + '-last');
+            tabs.find('.tab-pane').eq(1).attr('id', id + '-next');
+            tabs.find('.tab-pane').eq(2).attr('id', id + '-table');
+            container.append(tabs);
+        }
+    };
 
-	var createView = function( tournament ) {
-		var container = $( '#data' );
-		var id = tournament.id.toLowerCase();
-		if( container.find( '#' + id ).size() === 0 ) {
-			var tabs = $( tabsTemplate ).attr( 'id', id ) ;
-			tabs.find( '.panel-heading' ).text( tournament.id );
-			tabs.find( 'a' ).eq( 0 ).attr( 'href', '#' + id + '-last' );
-			tabs.find( 'a' ).eq( 1 ).attr( 'href', '#' + id + '-next' );
-			tabs.find( 'a' ).eq( 2 ).attr( 'href', '#' + id + '-table' );
-			tabs.find( '.tab-pane' ).eq( 0 ).attr( 'id', id + '-last' );
-			tabs.find( '.tab-pane' ).eq( 1 ).attr( 'id', id + '-next' );
-			tabs.find( '.tab-pane' ).eq( 2 ).attr( 'id', id + '-table' );
-			container.append( tabs );
-		}
-	};
+    TournamentView.prototype.updateTable = function () {
+        var table = new Table(this.tournament);
+        var el = jQuery("#" + this.tournament.id.toLowerCase() + "-table");
+        var tableEl = jQuery(tableTemplate);
+        var ranking = table.getRanking();
+        for (var i = 0; i < ranking.length; i++) {
+            var row = jQuery("<tr></tr>");
+            row.append(jQuery("<td></td>").text(i + 1));
+            row.append(jQuery("<td></td>").text(ranking[i].team.name));
+            row.append(jQuery("<td></td>").text(ranking[i].gamesPlayed));
+            row.append(jQuery("<td></td>").text(ranking[i].wins));
+            row.append(jQuery("<td></td>").text(ranking[i].draws));
+            row.append(jQuery("<td></td>").text(ranking[i].losses));
+            row.append(jQuery("<td></td>").text(ranking[i].goalsFor));
+            row.append(jQuery("<td></td>").text(ranking[i].goalsAgainst));
+            row.append(jQuery("<td></td>").text(ranking[i].points));
+            tableEl.find('tbody').append(row);
+        }
+        el.empty().append(tableEl);
+        return this;
+    };
 
-	var updateView = function() {
-		updateTable( dfb.getTournament( 'BL1' ) );
-		updateTable( dfb.getTournament( 'BL2' ) );
-		updateTable( dfb.getTournament( 'BL3' ) );
-		updateLastRound( dfb.getTournament( 'BL1' ) );
-		updateLastRound( dfb.getTournament( 'BL2' ) );
-		updateLastRound( dfb.getTournament( 'BL3' ) );
-		updateNextRound( dfb.getTournament( 'BL1' ) );
-		updateNextRound( dfb.getTournament( 'BL2' ) );
-		updateNextRound( dfb.getTournament( 'BL3' ) );
-	};
 
-	var createHandler = function() {
-		createSeason();
-		updateView();
-	};
-	var nextMatchHandler = function() {
-		if( !(season instanceof Season) ) {
-			throw "Create a season first.";
-		}
-		season.next();
-		updateView();
-	};
-	var endSeasonHandler = function() {
-		if( !(season instanceof Season) ) {
-			throw "Create a season first.";
-		}
-		while( !season.isFinished() ) {
-			season.next();
-		}
-		updateView();
+    TournamentView.prototype.updateRound = function (round, type) {
+        var el = $("#" + this.tournament.id.toLowerCase() + "-" + type);
+        if (round === null) {
+            el.text('No matches.');
+            return this;
+        }
+        var roundEl = jQuery(roundTemplate);
+        for (var i in round.fixtures) {
+            var match = round.fixtures[i];
+            var row = jQuery("<tr></tr>");
+            row.append(jQuery('<td></td>').text(match.home.name + ' - ' + match.away.name));
+            var result = match.result ? ( match.result.goalsHome + ':' + match.result.goalsAway ) : '-:-';
+            row.append(jQuery('<td></td>').text(result));
+            roundEl.find('tbody').append(row);
+        }
+        el.empty().append(roundEl);
+        return this;
+    };
 
-		year++;
-		createSeason();
-	};
-	var updateTable = function( tournament ) {
-		$( "#matchday" ).text( season.getDate().format( 'MMM Do YYYY' ) );
+    TournamentView.prototype.updateLastRound = function () {
+        var round = this.tournament.getLastRound();
+        return this.updateRound(round, 'last');
+    };
 
-		var table = new Table( tournament );
-		var el = $( "#" + tournament.id.toLowerCase() + "-table" );
-		var tableEl = $( tableTemplate );
-		var ranking = table.getRanking();
-		for( var i = 0; i < ranking.length; i++ ) {
-			var row = $( "<tr></tr>" );
-			row.append( $( "<td></td>" ).text( i + 1 ) );
-			row.append( $( "<td></td>" ).text( ranking[ i ].team.name ) );
-			row.append( $( "<td></td>" ).text( ranking[ i ].gamesPlayed ) );
-			row.append( $( "<td></td>" ).text( ranking[ i ].wins ) );
-			row.append( $( "<td></td>" ).text( ranking[ i ].draws ) );
-			row.append( $( "<td></td>" ).text( ranking[ i ].losses ) );
-			row.append( $( "<td></td>" ).text( ranking[ i ].goalsFor ) );
-			row.append( $( "<td></td>" ).text( ranking[ i ].goalsAgainst ) );
-			row.append( $( "<td></td>" ).text( ranking[ i ].points ) );
-			tableEl.find( 'tbody' ).append( row );
-		}
-		el.empty().append( tableEl );
-	};
+    TournamentView.prototype.updateNextRound = function () {
+        var round = this.tournament.getNextRound();
+        return this.updateRound(round, 'next');
+    };
 
-	var updateRound = function( tournament, round, type ) {
-		var el = $( "#" + tournament.id.toLowerCase() + "-" + type );
-		if( round === null ) {
-			el.text( 'No matches.' );
-			return;
-		}
-		var roundEl = $( roundTemplate );
-		for( var i in round.fixtures ) {
-			var match = round.fixtures[ i ];
-			var row = $( "<tr></tr>" );
-			row.append( $( '<td></td>' ).text( match.home.name + ' - ' + match.away.name ) );
-			var result = match.result ? ( match.result.goalsHome + ':' + match.result.goalsAway ) : '-:-';
-			row.append( $( '<td></td>' ).text( result ) );
-			roundEl.find( 'tbody' ).append( row );
-		}
-		el.empty().append( roundEl );
-	};
+    TournamentView.prototype.render = function() {
+        return this.updateTable().updateLastRound().updateNextRound();
+    };
+    exports.TournamentView = TournamentView;
+})(this);
 
-	var updateLastRound = function( tournament ) {
-		var round = tournament.getLastRound();
-		updateRound( tournament, round, 'last' );
-	};
+},{"./../table.js":37,"./../tournament.js":42,"jquery":14}],22:[function(require,module,exports){
+"use strict";
 
-	var updateNextRound = function( tournament ) {
-		var round = tournament.getNextRound();
-		updateRound( tournament, round, 'next' );
-	};
+window.$ = window.jQuery = require('jquery');
+var bootstrap = require("bootstrap");
 
-	var init = function() {
-		var associationFactory = new AssociationFactory();
-		dfb = associationFactory.getAssociationGermany( teams );
-		
-		$( "#create" ).on( "click", createHandler );
-		$( "#next" ).on( "click", nextMatchHandler );
-		$( "#end" ).on( "click", endSeasonHandler );
-	};
-	var teamsLoadedBl3 = $.get( "data/bl3.json" ).done( function( data ) {
-		teams[ 'BL3' ] = data;
-	} );
-	var teamsLoadedBl2 = $.get( "data/bl2.json" ).done( function( data ) {
-		teams[ 'BL2' ] = data;
-	} );
-	var teamsLoadedBl1 = $.get( "data/bl1.json" ).done( function( data ) {
-		teams[ 'BL1' ] = data;
-	} );
-	var calendarLoaded = $.get( "data/calendar.json" ).done( function( data ) {
-		calendar = JSON.stringify( data );
-	} );
-	$.when( teamsLoadedBl3, teamsLoadedBl2, teamsLoadedBl1, calendarLoaded ).done( function( data ) {
-		init();
-	} ).fail( function() {
-		throw "Could not load data.";
-	});
+var AssociationFactory = require("./associationFactory.js").AssociationFactory;
+var Season = require("./season.js").Season;
+var Tournament = require("./tournament.js").Tournament;
+var TournamentView = require("./Tournament/TournamentView.js").TournamentView;
+var TeamFactoryBundesliga1 = require("./TeamFactory/TeamFactoryBundesliga1.js").TeamFactoryBundesliga1;
+var TeamFactoryBundesliga2 = require("./TeamFactory/TeamFactoryBundesliga2.js").TeamFactoryBundesliga2;
+var TeamFactoryBundesliga3 = require("./TeamFactory/TeamFactoryBundesliga3.js").TeamFactoryBundesliga3;
+
+(function ($) {
+    var calendar;
+    var season;
+    var year = 2014;
+    var teams = {};
+    var dfb;
+    var viewBl1;
+    var viewBl2;
+    var viewBl3;
+
+    var createSeason = function () {
+        season = new Season(year, calendar);
+        dfb.schedule(season);
+
+        viewBl1 = new TournamentView('#data', dfb.getTournament('BL1'));
+        viewBl2 = new TournamentView('#data', dfb.getTournament('BL2'));
+        viewBl3 = new TournamentView('#data', dfb.getTournament('BL3'));
+
+        $('#season').text(year + '/' + ( year + 1 ));
+    };
+
+    var updateView = function () {
+        $("#matchday").text(season.getDate().format('MMM Do YYYY'));
+        viewBl1.render();
+        viewBl2.render();
+        viewBl3.render();
+    };
+
+    var nextMatchHandler = function () {
+        season.next();
+        updateView();
+    };
+    var endSeasonHandler = function () {
+        while (!season.isFinished()) {
+            season.next();
+        }
+        updateView();
+
+        year++;
+        createSeason();
+    };
+
+    var init = function () {
+        var associationFactory = new AssociationFactory();
+        dfb = associationFactory.getAssociationGermany(teams);
+
+        createSeason();
+        updateView();
+
+        $("#next").on("click", nextMatchHandler);
+        $("#end").on("click", endSeasonHandler);
+    };
+
+    var calendarLoaded = $.get("data/calendar.json").done(function (data) {
+        calendar = JSON.stringify(data);
+    });
+
+    $.when(TeamFactoryBundesliga3.getPromise(), TeamFactoryBundesliga2.getPromise(), TeamFactoryBundesliga1.getPromise(), calendarLoaded).done(function (data) {
+        teams[TeamFactoryBundesliga1.getKey()] = TeamFactoryBundesliga1.get();
+        teams[TeamFactoryBundesliga2.getKey()] = TeamFactoryBundesliga2.get();
+        teams[TeamFactoryBundesliga3.getKey()] = TeamFactoryBundesliga3.get();
+        init();
+    }).fail(function () {
+        throw "Could not load data.";
+    });
 }(jQuery));
 
-},{"./association.js":17,"./associationFactory.js":18,"./fixtureSchedulerRoundRobinTwoLegs.js":20,"./match.js":22,"./result.js":24,"./resultCalculatorStrengthPlusRandom.js":27,"./round.js":28,"./rules.js":29,"./season.js":30,"./table.js":31,"./tableEntry.js":32,"./team.js":33,"./teamFactoryJson.js":36,"./tournament.js":38,"./tournamentConfig.js":39,"./tournamentProxy.js":40,"./tournamentProxyRule.js":41,"bootstrap":1,"jquery":14}],17:[function(require,module,exports){
+},{"./TeamFactory/TeamFactoryBundesliga1.js":17,"./TeamFactory/TeamFactoryBundesliga2.js":18,"./TeamFactory/TeamFactoryBundesliga3.js":19,"./Tournament/TournamentView.js":21,"./associationFactory.js":24,"./season.js":36,"./tournament.js":42,"bootstrap":1,"jquery":14}],23:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -17058,7 +17129,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.Association = Association;
 })(this);
 
-},{"./tournament.js":38}],18:[function(require,module,exports){
+},{"./tournament.js":42}],24:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -17098,7 +17169,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 		assoc.getTournament( 'BL3' ).addTeams( teamFactory.get( JSON.stringify( teamObj[ 'BL3' ] ) ) );
 		assoc.getTournament( 'BL2' ).addTeams( teamFactory.get( JSON.stringify( teamObj[ 'BL2' ] ) ) );
 		assoc.getTournament( 'BL1' ).addTeams( teamFactory.get( JSON.stringify( teamObj[ 'BL1' ] ) ) );
-	
+
 		var proxy = new TournamentProxy();
 		proxy.addRule( new TournamentProxyRule( [ 'BL1' ], [ 'BL1' ], [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ] ) );
 		proxy.addRule( new TournamentProxyRule( [ 'BL1' ], [ 'BL2' ], [ -1, -2, -3 ] ) );
@@ -17115,7 +17186,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.AssociationFactory = AssociationFactory;
 })(this);
 
-},{"./association.js":17,"./fixtureSchedulerRoundRobinTwoLegs.js":20,"./resultCalculatorStrengthPlusRandom.js":27,"./rules.js":29,"./teamFactoryJson.js":36,"./tournament.js":38,"./tournamentConfig.js":39,"./tournamentProxy.js":40,"./tournamentProxyRule.js":41}],19:[function(require,module,exports){
+},{"./association.js":23,"./fixtureSchedulerRoundRobinTwoLegs.js":26,"./resultCalculatorStrengthPlusRandom.js":33,"./rules.js":35,"./teamFactoryJson.js":40,"./tournament.js":42,"./tournamentConfig.js":43,"./tournamentProxy.js":44,"./tournamentProxyRule.js":45}],25:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Match = require("./match.js").Match;
@@ -17131,7 +17202,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.FixtureScheduler = FixtureScheduler;
 })(this);
 
-},{"./match.js":22,"./round.js":28}],20:[function(require,module,exports){
+},{"./match.js":28,"./round.js":34}],26:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	
@@ -17181,7 +17252,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 
 })(this);
 
-},{"./fixtureScheduler.js":19,"./fixtures.js":21,"./match.js":22,"./round.js":28}],21:[function(require,module,exports){
+},{"./fixtureScheduler.js":25,"./fixtures.js":27,"./match.js":28,"./round.js":34}],27:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	
@@ -17244,7 +17315,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 
 })(this);
 
-},{"./match.js":22}],22:[function(require,module,exports){
+},{"./match.js":28}],28:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Result = require("./result.js").Result;
@@ -17272,7 +17343,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.Match = Match;
 })(this);
 
-},{"./result.js":24}],23:[function(require,module,exports){
+},{"./result.js":30}],29:[function(require,module,exports){
 // Avoid `console` errors in browsers that lack a console.
 (function() {
     var method;
@@ -17298,7 +17369,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 
 // Place any jQuery/helper plugins in here.
 
-},{}],24:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	
@@ -17315,7 +17386,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	
 })(this);
 
-},{}],25:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var ResultCalculator = function( match ) {
@@ -17328,7 +17399,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.ResultCalculator = ResultCalculator;
 })(this);
 
-},{}],26:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Result           = require("./result.js").Result;
@@ -17353,7 +17424,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.ResultCalculatorDeterministic = ResultCalculatorDeterministic;
 })(this);
 
-},{"./result.js":24,"./resultCalculator.js":25}],27:[function(require,module,exports){
+},{"./result.js":30,"./resultCalculator.js":31}],33:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Result           = require("./result.js").Result;
@@ -17378,7 +17449,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.ResultCalculatorStrengthPlusRandom = ResultCalculatorStrengthPlusRandom;
 })(this);
 
-},{"./result.js":24,"./resultCalculator.js":25}],28:[function(require,module,exports){
+},{"./result.js":30,"./resultCalculator.js":31}],34:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Match = require("./match.js").Match;
@@ -17412,7 +17483,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.Round = Round;
 })(this);
 
-},{"./match.js":22}],29:[function(require,module,exports){
+},{"./match.js":28}],35:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -17472,7 +17543,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.Rules = Rules;
 })(this);
 
-},{}],30:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var moment = require('moment');
@@ -17510,7 +17581,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 			this.calendar.push( event );		
 			date.add( 1, 'd' );
 		} while( date.isBefore( this.endDate ) );
-	}
+	};
 
 	Season.prototype.isSchedulable = function( tournament ) {
 		if( tournament.fixtures && tournament.fixtures.rounds ) {
@@ -17595,7 +17666,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.Season = Season;
 })(this);
 
-},{"./tournament.js":38,"moment":15}],31:[function(require,module,exports){
+},{"./tournament.js":42,"moment":15}],37:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var TableEntry = require("./tableEntry.js").TableEntry;
@@ -17658,7 +17729,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.Table = Table;
 })(this);
 
-},{"./tableEntry.js":32}],32:[function(require,module,exports){
+},{"./tableEntry.js":38}],38:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -17737,7 +17808,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.TableEntry = TableEntry;
 })(this);
 
-},{"./result.js":24}],33:[function(require,module,exports){
+},{"./result.js":30}],39:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Team = function( data ) {
@@ -17758,48 +17829,11 @@ var tabsTemplate = '<div class="panel panel-default">\
 })(this);
 
 
-},{}],34:[function(require,module,exports){
-(function(exports) {
-	"use strict";
-	var TeamFactory = function() {
-	};
-
-	exports.TeamFactory = TeamFactory;
-})(this);
-
-},{}],35:[function(require,module,exports){
-(function(exports) {
-	"use strict";
-	var Tournament = require("./tournament.js").Tournament;
-	var TeamFactory = require("./teamFactory.js").TeamFactory;
-	
-	var TeamFactoryFile = function() {
-		this.init();
-
-	};
-	TeamFactoryFile.prototype = new TeamFactory();
-	TeamFactoryFile.prototype.parent = TeamFactory.prototype;
-
-	TeamFactoryFile.prototype.init = function() {
-		this.teams = [];
-	};
-	
-	TeamFactoryFile.prototype.get = function( numTeams ) {
-		this.teams = [];
-		for( var i = 0; i < numTeams; i++ ) {
-			this.teams.push( new Team() );
-		}
-		return this.teams;
-	};
-	
-	exports.TeamFactoryFile = TeamFactoryFile;
-})(this);
-
-},{"./teamFactory.js":34,"./tournament.js":38}],36:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Team        = require("./team.js").Team;
-	var TeamFactory = require("./teamFactory.js").TeamFactory;
+	var TeamFactory = require("./TeamFactory/TeamFactory.js").TeamFactory;
 	
 	var TeamFactoryJson = function() {
 	};
@@ -17819,11 +17853,11 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.TeamFactoryJson = TeamFactoryJson;
 })(this);
 
-},{"./team.js":33,"./teamFactory.js":34}],37:[function(require,module,exports){
+},{"./TeamFactory/TeamFactory.js":16,"./team.js":39}],41:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Team        = require("./team.js").Team;
-	var TeamFactory = require("./teamFactory.js").TeamFactory;
+	var TeamFactory = require("./TeamFactory/TeamFactory.js").TeamFactory;
 	
 	var TeamFactoryRandom = function() {
 		this.init();
@@ -17847,7 +17881,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.TeamFactoryRandom = TeamFactoryRandom;
 })(this);
 
-},{"./team.js":33,"./teamFactory.js":34}],38:[function(require,module,exports){
+},{"./TeamFactory/TeamFactory.js":16,"./team.js":39}],42:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -17916,7 +17950,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.Tournament = Tournament;
 })(this);
 
-},{"./fixtures.js":21}],39:[function(require,module,exports){
+},{"./fixtures.js":27}],43:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -17959,7 +17993,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 	exports.TournamentConfig = TournamentConfig;
 })(this);
 
-},{"./fixtureScheduler.js":19,"./resultCalculator.js":25,"./rules.js":29}],40:[function(require,module,exports){
+},{"./fixtureScheduler.js":25,"./resultCalculator.js":31,"./rules.js":35}],44:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -18013,7 +18047,7 @@ var tabsTemplate = '<div class="panel panel-default">\
 
 
 
-},{"./tournamentProxyRule.js":41}],41:[function(require,module,exports){
+},{"./tournamentProxyRule.js":45}],45:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -18061,4 +18095,4 @@ var tabsTemplate = '<div class="panel panel-default">\
 
 
 
-},{"./table.js":31}]},{},[16,18,17,19,20,21,22,23,26,25,27,24,28,29,30,32,31,35,34,36,37,33,39,38,40,41]);
+},{"./table.js":37}]},{},[22,24,23,25,26,27,28,29,32,31,33,30,34,35,36,38,37,40,41,39,43,42,44,45]);

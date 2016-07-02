@@ -37,7 +37,7 @@
 		assoc.getTournament( 'BL3' ).addTeams( teamFactory.get( JSON.stringify( teamObj[ 'BL3' ] ) ) );
 		assoc.getTournament( 'BL2' ).addTeams( teamFactory.get( JSON.stringify( teamObj[ 'BL2' ] ) ) );
 		assoc.getTournament( 'BL1' ).addTeams( teamFactory.get( JSON.stringify( teamObj[ 'BL1' ] ) ) );
-	
+
 		var proxy = new TournamentProxy();
 		proxy.addRule( new TournamentProxyRule( [ 'BL1' ], [ 'BL1' ], [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ] ) );
 		proxy.addRule( new TournamentProxyRule( [ 'BL1' ], [ 'BL2' ], [ -1, -2, -3 ] ) );

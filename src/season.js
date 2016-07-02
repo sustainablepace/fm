@@ -35,7 +35,7 @@
 			this.calendar.push( event );		
 			date.add( 1, 'd' );
 		} while( date.isBefore( this.endDate ) );
-	}
+	};
 
 	Season.prototype.isSchedulable = function( tournament ) {
 		if( tournament.fixtures && tournament.fixtures.rounds ) {

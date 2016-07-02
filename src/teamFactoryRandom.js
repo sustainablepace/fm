@@ -1,7 +1,7 @@
 (function(exports) {
 	"use strict";
 	var Team        = require("./team.js").Team;
-	var TeamFactory = require("./teamFactory.js").TeamFactory;
+	var TeamFactory = require("./TeamFactory/TeamFactory.js").TeamFactory;
 	
 	var TeamFactoryRandom = function() {
 		this.init();
