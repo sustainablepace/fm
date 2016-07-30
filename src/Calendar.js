@@ -1,6 +1,7 @@
 (function (exports) {
     "use strict";
     var moment = require('moment');
+    var Tournament = require("./tournament.js").Tournament;
 
     var Calendar = function (year) {
         this.now = 0;
@@ -40,7 +41,6 @@
 
     Calendar.prototype.schedule = function(tournament) {
         var dates = tournament.config.getCalendar().get();
-
     };
     exports.Calendar = Calendar;
 })(this);

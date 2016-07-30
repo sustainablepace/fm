@@ -13,6 +13,9 @@ var Tournament = require("../tournament.js").Tournament;
 var TeamFactoryRandom = require("../teamFactoryRandom.js").TeamFactoryRandom;
 var Table = require("../table.js").Table;
 
+var TournamentCalendar = require("../Tournament/TournamentCalendar.js").TournamentCalendar;
+var Calendar = require("../Calendar.js").Calendar;
+
 describe('TournamentProxyRule', function(){
   var sut = null;
   var tournamentBl1 = null;
@@ -31,13 +34,27 @@ describe('TournamentProxyRule', function(){
 			'W7-6': ['BL1'],\
 			'W8-6': ['BL1']\
 		}";
-		var season = new Season( 2015, json );
+	  var calendar = new Calendar(2015);
+
+	  var season = new Season( 2015, json, calendar );
 		var scheduler = new FixtureSchedulerRoundRobinTwoLegs();
 		var calculator = new ResultCalculatorDeterministic();
 		var rules = new Rules();
-		var config = new TournamentConfig( scheduler, calculator, rules );
+	  var tournamentCalendarJson = "{\
+		'W50-6': true,\
+		'W4-6': true,\
+		'W5-6': true,\
+		'W6-6': true,\
+		'W7-6': true,\
+		'W8-6': true\
+	}";
+	  var tournamentCalendar = new TournamentCalendar();
+	  tournamentCalendar.calendar = eval('('+tournamentCalendarJson+')');
+	  var config = new TournamentConfig( scheduler, calculator, rules, tournamentCalendar );
 
-		tournamentBl1 = new Tournament( 'BL1', config );
+
+
+	  tournamentBl1 = new Tournament( 'BL1', config );
 
 		var size = 4;
 		var factory = new TeamFactoryRandom();

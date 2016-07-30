@@ -27,7 +27,6 @@
 			new ResultCalculatorStrengthPlusRandom(),
 			new Rules(),
 			calObj[ 'BL1' ]
-
 		);
 
 		var configBl2 = new TournamentConfig(

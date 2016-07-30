@@ -16768,6 +16768,7 @@ return jQuery;
 (function (exports) {
     "use strict";
     var moment = require('moment');
+    var Tournament = require("./tournament.js").Tournament;
 
     var Calendar = function (year) {
         this.now = 0;
@@ -16807,13 +16808,12 @@ return jQuery;
 
     Calendar.prototype.schedule = function(tournament) {
         var dates = tournament.config.getCalendar().get();
-
     };
     exports.Calendar = Calendar;
 })(this);
 
 
-},{"moment":15}],17:[function(require,module,exports){
+},{"./tournament.js":47,"moment":15}],17:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var TeamFactory = function() {
@@ -16903,7 +16903,9 @@ return jQuery;
     };
 
     TournamentCalendar.prototype.init = function (filename) {
-        this.promise = jQuery.get(filename).done(this.handler.bind(this));
+        if(filename) {
+            this.promise = jQuery.get(filename).done(this.handler.bind(this));
+        }
     };
 
     TournamentCalendar.prototype.handler = function (data) {
@@ -17089,6 +17091,7 @@ var TournamentView = require("./Tournament/TournamentView.js").TournamentView;
 var TeamFactoryBundesliga1 = require("./TeamFactory/TeamFactoryBundesliga1.js").TeamFactoryBundesliga1;
 var TeamFactoryBundesliga2 = require("./TeamFactory/TeamFactoryBundesliga2.js").TeamFactoryBundesliga2;
 var TeamFactoryBundesliga3 = require("./TeamFactory/TeamFactoryBundesliga3.js").TeamFactoryBundesliga3;
+var Calendar = require("./Calendar.js").Calendar;
 var TournamentCalendarBundesliga1 = require("./Tournament/TournamentCalendarBundesliga1.js").TournamentCalendarBundesliga1;
 var TournamentCalendarBundesliga2 = require("./Tournament/TournamentCalendarBundesliga2.js").TournamentCalendarBundesliga2;
 var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBundesliga3.js").TournamentCalendarBundesliga3;
@@ -17099,13 +17102,14 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
     var year = 2014;
     var teams = {};
     var cals = {};
+    var cal;
     var dfb;
     var viewBl1;
     var viewBl2;
     var viewBl3;
 
     var createSeason = function () {
-        season = new Season(year, calendar);
+        season = new Season(year, calendar, cal);
         dfb.schedule(season);
 
         viewBl1 = new TournamentView('#data', dfb.getTournament('BL1'));
@@ -17137,6 +17141,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
     };
 
     var init = function () {
+        cal = new Calendar(year);
         var associationFactory = new AssociationFactory();
         dfb = associationFactory.getAssociationGermany(teams, cals);
 
@@ -17170,7 +17175,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
     });
 }(jQuery));
 
-},{"./TeamFactory/TeamFactoryBundesliga1.js":18,"./TeamFactory/TeamFactoryBundesliga2.js":19,"./TeamFactory/TeamFactoryBundesliga3.js":20,"./Tournament/TournamentCalendarBundesliga1.js":23,"./Tournament/TournamentCalendarBundesliga2.js":24,"./Tournament/TournamentCalendarBundesliga3.js":25,"./Tournament/TournamentView.js":26,"./associationFactory.js":29,"./season.js":41,"./tournament.js":47,"bootstrap":1,"jquery":14}],28:[function(require,module,exports){
+},{"./Calendar.js":16,"./TeamFactory/TeamFactoryBundesliga1.js":18,"./TeamFactory/TeamFactoryBundesliga2.js":19,"./TeamFactory/TeamFactoryBundesliga3.js":20,"./Tournament/TournamentCalendarBundesliga1.js":23,"./Tournament/TournamentCalendarBundesliga2.js":24,"./Tournament/TournamentCalendarBundesliga3.js":25,"./Tournament/TournamentView.js":26,"./associationFactory.js":29,"./season.js":41,"./tournament.js":47,"bootstrap":1,"jquery":14}],28:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -17282,7 +17287,6 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 			new ResultCalculatorStrengthPlusRandom(),
 			new Rules(),
 			calObj[ 'BL1' ]
-
 		);
 
 		var configBl2 = new TournamentConfig(
@@ -17704,7 +17708,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 		this.startDate = moment( this.year + '-W28-1' );
 		this.endDate = moment( this.startDate ).add( 1, 'y' ).subtract( 1, 'd' );
 
-  //      this.cal.addEvents(eval('(' + this.calendarJson + ')'));
+//        this.cal.addEvents(eval('(' + this.calendarJson + ')'));
 		this.createCalendar( this.calendarJson );
 	};
 	
@@ -17746,7 +17750,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 				this.tournaments = {};
 			}
 			this.tournaments[ tournament.id ] = tournament;
-//            this.cal.schedule(tournament);
+            this.cal.schedule(tournament);
 		}
 	};
 	

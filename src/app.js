@@ -10,6 +10,7 @@ var TournamentView = require("./Tournament/TournamentView.js").TournamentView;
 var TeamFactoryBundesliga1 = require("./TeamFactory/TeamFactoryBundesliga1.js").TeamFactoryBundesliga1;
 var TeamFactoryBundesliga2 = require("./TeamFactory/TeamFactoryBundesliga2.js").TeamFactoryBundesliga2;
 var TeamFactoryBundesliga3 = require("./TeamFactory/TeamFactoryBundesliga3.js").TeamFactoryBundesliga3;
+var Calendar = require("./Calendar.js").Calendar;
 var TournamentCalendarBundesliga1 = require("./Tournament/TournamentCalendarBundesliga1.js").TournamentCalendarBundesliga1;
 var TournamentCalendarBundesliga2 = require("./Tournament/TournamentCalendarBundesliga2.js").TournamentCalendarBundesliga2;
 var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBundesliga3.js").TournamentCalendarBundesliga3;
@@ -20,13 +21,14 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
     var year = 2014;
     var teams = {};
     var cals = {};
+    var cal;
     var dfb;
     var viewBl1;
     var viewBl2;
     var viewBl3;
 
     var createSeason = function () {
-        season = new Season(year, calendar);
+        season = new Season(year, calendar, cal);
         dfb.schedule(season);
 
         viewBl1 = new TournamentView('#data', dfb.getTournament('BL1'));
@@ -58,6 +60,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
     };
 
     var init = function () {
+        cal = new Calendar(year);
         var associationFactory = new AssociationFactory();
         dfb = associationFactory.getAssociationGermany(teams, cals);
 

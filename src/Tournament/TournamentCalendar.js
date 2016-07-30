@@ -11,7 +11,9 @@
     };
 
     TournamentCalendar.prototype.init = function (filename) {
-        this.promise = jQuery.get(filename).done(this.handler.bind(this));
+        if(filename) {
+            this.promise = jQuery.get(filename).done(this.handler.bind(this));
+        }
     };
 
     TournamentCalendar.prototype.handler = function (data) {

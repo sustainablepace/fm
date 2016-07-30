@@ -19,7 +19,7 @@
 		this.startDate = moment( this.year + '-W28-1' );
 		this.endDate = moment( this.startDate ).add( 1, 'y' ).subtract( 1, 'd' );
 
-  //      this.cal.addEvents(eval('(' + this.calendarJson + ')'));
+//        this.cal.addEvents(eval('(' + this.calendarJson + ')'));
 		this.createCalendar( this.calendarJson );
 	};
 	
@@ -61,7 +61,7 @@
 				this.tournaments = {};
 			}
 			this.tournaments[ tournament.id ] = tournament;
-//            this.cal.schedule(tournament);
+            this.cal.schedule(tournament);
 		}
 	};
 	
