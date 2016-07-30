@@ -8,9 +8,11 @@ var ResultCalculatorDeterministic = require("../resultCalculatorDeterministic.js
 var FixtureSchedulerRoundRobinTwoLegs = require("../fixtureSchedulerRoundRobinTwoLegs.js").FixtureSchedulerRoundRobinTwoLegs;
 var Rules = require("../rules.js").Rules;
 var TournamentConfig = require("../tournamentConfig.js").TournamentConfig;
+var TournamentCalendar = require("../Tournament/TournamentCalendar.js").TournamentCalendar;
 var Tournament = require("../tournament.js").Tournament;
 var TeamFactoryRandom = require("../teamFactoryRandom.js").TeamFactoryRandom;
 var Team = require("../team.js").Team;
+var Calendar = require("../Calendar.js").Calendar;
 
 describe('Table', function(){
   var sut = null;
@@ -24,13 +26,24 @@ describe('Table', function(){
 		'W5-6': ['BL1'],\
 		'W6-6': ['BL1'],\
 		'W6-7': ['BL1'],\
-	}";		
+	}";
+	  var calendar = new Calendar(2015);
 
-	var season = new Season( 2015, json );
+	  var season = new Season( 2015, json, calendar );
 	var calculator = new ResultCalculatorDeterministic();
 	var scheduler = new FixtureSchedulerRoundRobinTwoLegs();
 	var rules = new Rules();
-	var config = new TournamentConfig( scheduler, calculator, rules );
+	  var tournamentCalendarJson = "{\
+		'W50-6': true,\
+		'W4-6': true,\
+		'W5-6': true,\
+		'W6-6': true,\
+		'W7-6': true,\
+		'W8-6': true\
+	}";
+	  var tournamentCalendar = new TournamentCalendar();
+	  tournamentCalendar.calendar = eval('('+tournamentCalendarJson+')');
+	var config = new TournamentConfig( scheduler, calculator, rules, tournamentCalendar );
 	var tournament = new Tournament( 'BL1', config );
 	var teamFactory = new TeamFactoryRandom();
 	teams = teamFactory.get( 4 );

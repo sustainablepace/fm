@@ -13,6 +13,8 @@ var ResultCalculatorDeterministic = require("../resultCalculatorDeterministic.js
 var FixtureSchedulerRoundRobinTwoLegs = require("../fixtureSchedulerRoundRobinTwoLegs.js").FixtureSchedulerRoundRobinTwoLegs;
 var TeamFactoryRandom = require("../teamFactoryRandom.js").TeamFactoryRandom;
 var Table = require("../table.js").Table;
+var TournamentCalendar = require("../Tournament/TournamentCalendar.js").TournamentCalendar;
+var Calendar = require("../Calendar.js").Calendar;
 
 describe('Association', function(){
   var sut = null;
@@ -82,12 +84,28 @@ describe('Association', function(){
 			'W7-6': ['BL1'],\
 			'W8-6': ['BL1']\
 		}";
-		var season = new Season( 2015, json );
 
-		tournamentBl1 = new Tournament( 'BL1', new TournamentConfig( 
+		var calendar = new Calendar(2015);
+
+		var season = new Season( 2015, json, calendar );
+
+
+		var tournamentCalendarJson = "{\
+		'W50-6': true,\
+		'W4-6': true,\
+		'W5-6': true,\
+		'W6-6': true,\
+		'W7-6': true,\
+		'W8-6': true\
+	}";
+		var tournamentCalendar = new TournamentCalendar();
+		tournamentCalendar.calendar = eval('('+tournamentCalendarJson+')');
+
+		tournamentBl1 = new Tournament( 'BL1', new TournamentConfig(
 			new FixtureSchedulerRoundRobinTwoLegs(), 
 			new ResultCalculatorDeterministic(), 
-			new Rules() 
+			new Rules(),
+			tournamentCalendar
 		) );
 
 		var size = 4;

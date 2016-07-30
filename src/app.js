@@ -20,13 +20,14 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
     var year = 2014;
     var teams = {};
     var cals = {};
+    var cal;
     var dfb;
     var viewBl1;
     var viewBl2;
     var viewBl3;
 
     var createSeason = function () {
-        season = new Season(year, calendar);
+        season = new Season(year, calendar, cal);
         dfb.schedule(season);
 
         viewBl1 = new TournamentView('#data', dfb.getTournament('BL1'));
@@ -58,6 +59,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
     };
 
     var init = function () {
+        cal = new Calendar(year);
         var associationFactory = new AssociationFactory();
         dfb = associationFactory.getAssociationGermany(teams, cals);
 
