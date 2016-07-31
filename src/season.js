@@ -33,7 +33,7 @@
 			if( cal[ index ] ) {
 				event = cal[ index ];
 			}
-			this.calendar.push( event );		
+			this.calendar.push( event );
 			date.add( 1, 'd' );
 		} while( date.isBefore( this.endDate ) );
 	};

@@ -1,5 +1,7 @@
 node_modules
 *.iml
+js/bundle.js
+.idea
 
 #################
 ## Eclipse
