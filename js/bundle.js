@@ -16829,7 +16829,43 @@ return jQuery;
 })(this);
 
 
-},{"./tournament.js":47,"moment":15}],17:[function(require,module,exports){
+},{"./tournament.js":48,"moment":15}],17:[function(require,module,exports){
+(function(exports) {
+    "use strict";
+
+
+    var Competition = function( id, scheduler, resultCalculator, rules, calendar ) {
+        this.id = id;
+        this.scheduler = scheduler;
+        this.resultCalculator = resultCalculator;
+        this.rules = rules;
+        this.calendar = calendar;
+    };
+
+    Competition.prototype.getScheduler = function () {
+        return this.scheduler;
+    };
+
+    Competition.prototype.getResultCalculator = function () {
+        return this.resultCalculator;
+    };
+
+    Competition.prototype.getRules = function () {
+        return this.rules;
+    };
+
+    Competition.prototype.getCalendar = function () {
+        return this.calendar;
+    };
+
+    Competition.prototype.createTournament = function () {
+        return this.calendar;
+    };
+
+    exports.Competition = Competition;
+})(this);
+
+},{}],18:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var TeamFactory = function() {
@@ -16838,7 +16874,7 @@ return jQuery;
 	exports.TeamFactory = TeamFactory;
 })(this);
 
-},{}],18:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 (function (exports) {
     "use strict";
 
@@ -16847,7 +16883,7 @@ return jQuery;
     exports.TeamFactoryBundesliga1 = new TeamFactoryFile('BL1', '/data/bl1.json');
 })(this);
 
-},{"./TeamFactoryFile.js":21}],19:[function(require,module,exports){
+},{"./TeamFactoryFile.js":22}],20:[function(require,module,exports){
 (function (exports) {
     "use strict";
 
@@ -16856,7 +16892,7 @@ return jQuery;
     exports.TeamFactoryBundesliga2 = new TeamFactoryFile('BL2', '/data/bl2.json');
 })(this);
 
-},{"./TeamFactoryFile.js":21}],20:[function(require,module,exports){
+},{"./TeamFactoryFile.js":22}],21:[function(require,module,exports){
 (function (exports) {
     "use strict";
 
@@ -16865,7 +16901,7 @@ return jQuery;
     exports.TeamFactoryBundesliga3 = new TeamFactoryFile('BL3', '/data/bl3.json');
 })(this);
 
-},{"./TeamFactoryFile.js":21}],21:[function(require,module,exports){
+},{"./TeamFactoryFile.js":22}],22:[function(require,module,exports){
 (function (exports) {
     "use strict";
     var TeamFactory = require("./TeamFactory.js").TeamFactory;
@@ -16905,7 +16941,7 @@ return jQuery;
     exports.TeamFactoryFile = TeamFactoryFile;
 })(this);
 
-},{"./TeamFactory.js":17,"jquery":14}],22:[function(require,module,exports){
+},{"./TeamFactory.js":18,"jquery":14}],23:[function(require,module,exports){
 (function (exports) {
     "use strict";
 
@@ -16939,7 +16975,7 @@ return jQuery;
     exports.TournamentCalendar = TournamentCalendar;
 })(this);
 
-},{"./../tournament.js":47,"jquery":14}],23:[function(require,module,exports){
+},{"./../tournament.js":48,"jquery":14}],24:[function(require,module,exports){
 (function (exports) {
     "use strict";
 
@@ -16948,7 +16984,7 @@ return jQuery;
     exports.TournamentCalendarBundesliga1 = new TournamentCalendar('/data/calendar/bl1.json');
 })(this);
 
-},{"./TournamentCalendar.js":22}],24:[function(require,module,exports){
+},{"./TournamentCalendar.js":23}],25:[function(require,module,exports){
 (function (exports) {
     "use strict";
 
@@ -16957,7 +16993,7 @@ return jQuery;
     exports.TournamentCalendarBundesliga2 = new TournamentCalendar('/data/calendar/bl2.json');
 })(this);
 
-},{"./TournamentCalendar.js":22}],25:[function(require,module,exports){
+},{"./TournamentCalendar.js":23}],26:[function(require,module,exports){
 (function (exports) {
     "use strict";
 
@@ -16966,7 +17002,7 @@ return jQuery;
     exports.TournamentCalendarBundesliga3 = new TournamentCalendar('/data/calendar/bl3.json');
 })(this);
 
-},{"./TournamentCalendar.js":22}],26:[function(require,module,exports){
+},{"./TournamentCalendar.js":23}],27:[function(require,module,exports){
 (function (exports) {
     "use strict";
 
@@ -17094,7 +17130,7 @@ return jQuery;
     exports.TournamentView = TournamentView;
 })(this);
 
-},{"./../table.js":42,"./../tournament.js":47,"jquery":14}],27:[function(require,module,exports){
+},{"./../table.js":43,"./../tournament.js":48,"jquery":14}],28:[function(require,module,exports){
 "use strict";
 
 window.$ = window.jQuery = require('jquery');
@@ -17191,7 +17227,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
     });
 }(jQuery));
 
-},{"./Calendar.js":16,"./TeamFactory/TeamFactoryBundesliga1.js":18,"./TeamFactory/TeamFactoryBundesliga2.js":19,"./TeamFactory/TeamFactoryBundesliga3.js":20,"./Tournament/TournamentCalendarBundesliga1.js":23,"./Tournament/TournamentCalendarBundesliga2.js":24,"./Tournament/TournamentCalendarBundesliga3.js":25,"./Tournament/TournamentView.js":26,"./associationFactory.js":29,"./season.js":41,"./tournament.js":47,"bootstrap":1,"jquery":14}],28:[function(require,module,exports){
+},{"./Calendar.js":16,"./TeamFactory/TeamFactoryBundesliga1.js":19,"./TeamFactory/TeamFactoryBundesliga2.js":20,"./TeamFactory/TeamFactoryBundesliga3.js":21,"./Tournament/TournamentCalendarBundesliga1.js":24,"./Tournament/TournamentCalendarBundesliga2.js":25,"./Tournament/TournamentCalendarBundesliga3.js":26,"./Tournament/TournamentView.js":27,"./associationFactory.js":30,"./season.js":42,"./tournament.js":48,"bootstrap":1,"jquery":14}],29:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -17273,7 +17309,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	exports.Association = Association;
 })(this);
 
-},{"./tournament.js":47}],29:[function(require,module,exports){
+},{"./tournament.js":48}],30:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -17345,7 +17381,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	exports.AssociationFactory = AssociationFactory;
 })(this);
 
-},{"./association.js":28,"./fixtureSchedulerRoundRobinTwoLegs.js":31,"./resultCalculatorStrengthPlusRandom.js":38,"./rules.js":40,"./teamFactoryJson.js":45,"./tournament.js":47,"./tournamentConfig.js":48,"./tournamentProxy.js":49,"./tournamentProxyRule.js":50}],30:[function(require,module,exports){
+},{"./association.js":29,"./fixtureSchedulerRoundRobinTwoLegs.js":32,"./resultCalculatorStrengthPlusRandom.js":39,"./rules.js":41,"./teamFactoryJson.js":46,"./tournament.js":48,"./tournamentConfig.js":49,"./tournamentProxy.js":50,"./tournamentProxyRule.js":51}],31:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Match = require("./match.js").Match;
@@ -17361,7 +17397,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	exports.FixtureScheduler = FixtureScheduler;
 })(this);
 
-},{"./match.js":33,"./round.js":39}],31:[function(require,module,exports){
+},{"./match.js":34,"./round.js":40}],32:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	
@@ -17411,7 +17447,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 
 })(this);
 
-},{"./fixtureScheduler.js":30,"./fixtures.js":32,"./match.js":33,"./round.js":39}],32:[function(require,module,exports){
+},{"./fixtureScheduler.js":31,"./fixtures.js":33,"./match.js":34,"./round.js":40}],33:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	
@@ -17474,7 +17510,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 
 })(this);
 
-},{"./match.js":33}],33:[function(require,module,exports){
+},{"./match.js":34}],34:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Result = require("./result.js").Result;
@@ -17502,7 +17538,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	exports.Match = Match;
 })(this);
 
-},{"./result.js":35}],34:[function(require,module,exports){
+},{"./result.js":36}],35:[function(require,module,exports){
 // Avoid `console` errors in browsers that lack a console.
 (function() {
     var method;
@@ -17528,7 +17564,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 
 // Place any jQuery/helper plugins in here.
 
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	
@@ -17545,7 +17581,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	
 })(this);
 
-},{}],36:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var ResultCalculator = function( match ) {
@@ -17558,7 +17594,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	exports.ResultCalculator = ResultCalculator;
 })(this);
 
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Result           = require("./result.js").Result;
@@ -17583,7 +17619,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	exports.ResultCalculatorDeterministic = ResultCalculatorDeterministic;
 })(this);
 
-},{"./result.js":35,"./resultCalculator.js":36}],38:[function(require,module,exports){
+},{"./result.js":36,"./resultCalculator.js":37}],39:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Result           = require("./result.js").Result;
@@ -17608,7 +17644,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	exports.ResultCalculatorStrengthPlusRandom = ResultCalculatorStrengthPlusRandom;
 })(this);
 
-},{"./result.js":35,"./resultCalculator.js":36}],39:[function(require,module,exports){
+},{"./result.js":36,"./resultCalculator.js":37}],40:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Match = require("./match.js").Match;
@@ -17642,7 +17678,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	exports.Round = Round;
 })(this);
 
-},{"./match.js":33}],40:[function(require,module,exports){
+},{"./match.js":34}],41:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -17702,7 +17738,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	exports.Rules = Rules;
 })(this);
 
-},{}],41:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var moment = require('moment');
@@ -17827,7 +17863,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	exports.Season = Season;
 })(this);
 
-},{"./tournament.js":47,"moment":15}],42:[function(require,module,exports){
+},{"./tournament.js":48,"moment":15}],43:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var TableEntry = require("./tableEntry.js").TableEntry;
@@ -17890,7 +17926,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	exports.Table = Table;
 })(this);
 
-},{"./tableEntry.js":43}],43:[function(require,module,exports){
+},{"./tableEntry.js":44}],44:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -17969,7 +18005,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	exports.TableEntry = TableEntry;
 })(this);
 
-},{"./result.js":35}],44:[function(require,module,exports){
+},{"./result.js":36}],45:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Team = function( data ) {
@@ -17990,7 +18026,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 })(this);
 
 
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Team        = require("./team.js").Team;
@@ -18014,7 +18050,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	exports.TeamFactoryJson = TeamFactoryJson;
 })(this);
 
-},{"./TeamFactory/TeamFactory.js":17,"./team.js":44}],46:[function(require,module,exports){
+},{"./TeamFactory/TeamFactory.js":18,"./team.js":45}],47:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 	var Team        = require("./team.js").Team;
@@ -18042,7 +18078,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	exports.TeamFactoryRandom = TeamFactoryRandom;
 })(this);
 
-},{"./TeamFactory/TeamFactory.js":17,"./team.js":44}],47:[function(require,module,exports){
+},{"./TeamFactory/TeamFactory.js":18,"./team.js":45}],48:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -18064,14 +18100,6 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	Tournament.prototype.addTeams = function( teams ) {
 		this.teams = this.teams.concat( teams );
 		return this;
-	};
-
-	Tournament.prototype.addStage = function( tournament ) {
-		if( tournament instanceof Tournament ) {
-			this.stages.push( tournament );
-		} else {
-			throw "Cannot add stage, is not a Tournament.";
-		}
 	};
 
 	Tournament.prototype.schedule = function( season ) {
@@ -18111,7 +18139,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 	exports.Tournament = Tournament;
 })(this);
 
-},{"./fixtures.js":32}],48:[function(require,module,exports){
+},{"./fixtures.js":33}],49:[function(require,module,exports){
 (function (exports) {
     "use strict";
 
@@ -18145,7 +18173,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
     exports.TournamentConfig = TournamentConfig;
 })(this);
 
-},{"./fixtureScheduler.js":30,"./resultCalculator.js":36,"./rules.js":40}],49:[function(require,module,exports){
+},{"./fixtureScheduler.js":31,"./resultCalculator.js":37,"./rules.js":41}],50:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -18199,7 +18227,7 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 
 
 
-},{"./tournamentProxyRule.js":50}],50:[function(require,module,exports){
+},{"./tournamentProxyRule.js":51}],51:[function(require,module,exports){
 (function(exports) {
 	"use strict";
 
@@ -18247,4 +18275,4 @@ var TournamentCalendarBundesliga3 = require("./Tournament/TournamentCalendarBund
 
 
 
-},{"./table.js":42}]},{},[27,29,28,16,30,31,32,33,34,37,36,38,35,39,40,41,43,42,45,46,44,48,47,49,50]);
+},{"./table.js":43}]},{},[28,30,29,16,17,31,32,33,34,35,38,37,39,36,40,41,42,44,43,46,47,45,49,48,50,51]);

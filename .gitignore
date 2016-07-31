@@ -1,6 +1,6 @@
 node_modules
 *.iml
-js/bundle.js
+js/*.js
 .idea
 
 #################

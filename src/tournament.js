@@ -21,14 +21,6 @@
 		return this;
 	};
 
-	Tournament.prototype.addStage = function( tournament ) {
-		if( tournament instanceof Tournament ) {
-			this.stages.push( tournament );
-		} else {
-			throw "Cannot add stage, is not a Tournament.";
-		}
-	};
-
 	Tournament.prototype.schedule = function( season ) {
 		season.unregisterTournament( this );
 		this.fixtures = this.config.getScheduler().schedule( this.teams );
