@@ -1,8 +1,7 @@
-var assert  = require("assert");
-var should  = require("should");
-var moment  = require("moment");
-
-var Calendar = require("../js/Calendar.js").Calendar;
+import assert from 'assert'
+import should from 'should'
+import moment from 'moment'
+import Calendar from '../js/Calendar.js';
 
 describe('Calendar', function(){
     var sut = null;

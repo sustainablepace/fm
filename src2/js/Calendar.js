@@ -1,78 +1,77 @@
-(function (exports) {
-    "use strict";
-    var moment = require('moment');
-    // var Tournament = require("./tournament.js").Tournament;
+"use strict";
+import moment from 'moment'
 
-    var Calendar = function (year) {
+export default class Calendar {
+
+    constructor(year) {
         this.startDate = moment(year + '-W28-1', 'YYYY-W-E');
         this.init();
     };
 
-    Calendar.prototype.init = function () {
+    init() {
         this.now = 0;
         this.events = {};
         this.endDate = moment(this.startDate).add(1, 'y').subtract(1, 'd');
         this.today = moment(this.startDate);
     };
 
-    Calendar.prototype.index = function ( date ) {
+    static index(date) {
         return date.format('YYYY-MM-DD');
     };
 
-    Calendar.prototype.getDate = function () {
+    getDate() {
         return this.today;
     };
 
-    Calendar.prototype.getYear = function () {
+    getYear() {
         return parseInt(this.getDate().format('YYYY'), 10);
     };
 
-    Calendar.prototype.getWeek = function () {
+    getWeek() {
         return parseInt(this.getDate().format('W'), 10);
     };
 
-    Calendar.prototype.getSeason = function () {
-        if(this.getWeek() >= 28){
+    getSeason() {
+        if (this.getWeek() >= 28) {
             return this.getYear() + '/' + (this.getYear() + 1);
         }
         return (this.getYear() - 1 ) + '/' + this.getYear();
     };
 
-    Calendar.prototype.getFormattedDate = function () {
+    getFormattedDate() {
         return this.getDate().format('MMM Do YYYY');
     };
 
-    Calendar.prototype.fastForward = function () {
-        if(this.events[this.index(this.today)]) {
+    fastForward() {
+        if (this.events[this.index(this.today)]) {
             return this;
         }
         this.today.add(1, 'd');
         return this.fastForward();
     };
 
-    Calendar.prototype.getEvents = function() {
+    getEvents() {
         return this.events;
     };
 
-    Calendar.prototype.addEvent = function(date, event) {
+    addEvent(date, event) {
         var index = this.index(date);
-        if(!this.events[index]) {
+        if (!this.events[index]) {
             this.events[index] = [];
         }
-        this.events[index].push( event );
+        this.events[index].push(event);
     };
 
-    Calendar.prototype.schedule = function(tournament) {
+    schedule(tournament) {
         var dates = tournament.config.getCalendar().get();
-        var date = moment( this.startDate );
+        var date = moment(this.startDate);
         do {
-            var index = 'W' + date.format( 'W-E' );
-            if( dates[ index ] ) {
+            var index = 'W' + date.format('W-E');
+            if (dates[index]) {
                 this.addEvent(date, tournament.id)
             }
-            date.add( 1, 'd' );
-        } while( date.isBefore( this.endDate ) );
+            date.add(1, 'd');
+        } while (date.isBefore(this.endDate));
     };
-    exports.Calendar = Calendar;
-})(this);
 
+}

@@ -1,9 +1,7 @@
 "use strict";
 
-window.$ = window.jQuery = require('jquery');
-var bootstrap = require("bootstrap");
-
-var Calendar = require("./Calendar.js").Calendar;
+import jQuery from 'jquery'
+import Calendar from './Calendar'
 
 (function ($) {
     var calendar = new Calendar(2016);
